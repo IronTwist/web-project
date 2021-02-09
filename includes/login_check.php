@@ -1,6 +1,6 @@
 <?php
 require_once "../connection/connection_constants.php";
-require_once "../connection/connection.php";
+require_once "../connection/config.php";
 require_once "functions.php";
 session_start();
 
@@ -26,7 +26,7 @@ if ($result->num_rows > 0){
                 $_SESSION["surname"] = $row["prenume"];
 
                 echo "sesiune setata";
-                header("Location: ../action_page.php");
+                header("Location: ../myplace.php");
 	}
 	
 }else{

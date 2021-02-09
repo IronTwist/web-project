@@ -1,0 +1,76 @@
+
+.navbar{
+    align-content: center;
+    height: 100%;
+    text-align: center;
+    background-image: linear-gradient(white, rgb(172, 172, 172));
+    border-radius: 0.5em;
+    box-shadow: 2px 2px 2px 0px black;
+    margin-top: 15px;
+}
+
+.navbar-toggler {
+    
+    height: 38px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+    box-shadow: 1px 2px 2px 2px black;
+    border-radius: 1em;
+    
+}
+
+.nav-link{
+    color: black;
+    border-radius: 0.5em;
+    font-weight: bold;
+    display:contents;
+    margin-left: 5px;
+    margin-right: 5px;
+    text-align: center; 
+    animation: normal;
+    transition: 0.3s;
+}
+
+li.nav-item:nth-child(1) > a:nth-child(1){
+    color: black;
+}
+
+li.nav-item:nth-child(2) > a:nth-child(1){
+    color: black;
+}
+
+li.nav-item:nth-child(3) > a:nth-child(1){
+    color: black;
+}
+
+li.nav-item:nth-child(4) > a:nth-child(1){
+    color: black;
+}
+li.nav-item:nth-child(5) > a:nth-child(1){
+    color: black;
+}
+li.nav-item:nth-child(6) > a:nth-child(1){
+    color: black;
+}
+
+
+a.nav-link:hover {
+    border-radius: 0.5em;
+    background-color: rgba(42, 124, 247, 0.336);
+    font-style: underline;
+    box-shadow: 2px 4px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.navLogo{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    text-align: center;
+    padding-top: 15px;
+    padding-left: 30px;
+    
+}
+
+
