@@ -2,6 +2,7 @@
     $root =$_SERVER['DOCUMENT_ROOT'];
     require $root."/connection/config.php";
     require $root."/includes/functions.php";
+    require $root."/includes/model/User.class.php";
 
     session_start();
 ?>
@@ -67,9 +68,16 @@ function checkEmail(emailInput){
     <div class="headerLogo">
             &nbsp;
     </div>
-    <div class="welcome">
-        Welcome back, Razvan!
-    </div>
+
+    <?php
+        if(isset($_SESSION)){
+            if (isset($_SESSION["user"])) {
+                echo "<div class=\"welcome\">Welcome back, ".$_SESSION["user"]->getUserName()."</div>";
+            }
+        }else{
+            echo " ";
+        }
+    ?> 
 </header>
 <?php require $root."/includes/navigation.php"; ?>
 

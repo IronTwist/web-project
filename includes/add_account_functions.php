@@ -25,24 +25,25 @@ function modificaString($text){
             }
         }
     }
+
     return trim($textReturn);
 }
 
-if(isset($_SERVER["REQUEST_METHOD"]) == "POST"){
+// if(isset($_SERVER["REQUEST_METHOD"]) == "POST"){
 
-    if (empty($_POST["prenume"])){
-        $prenumeerr="*Prenumele este obligatoriu"."<br>";
-        $eroare=1;
-    }else{
-        $prenume = test_input($_POST["prenume"]);
-        $prenume = modificaString($prenume);
+//     if (empty($_POST["prenume"])){
+//         $prenumeerr="*Prenumele este obligatoriu"."<br>";
+//         $eroare=1;
+//     }else{
+//         $prenume = test_input($_POST["prenume"]);
+//         $prenume = modificaString($prenume);
 
-        if (!preg_match("/^[a-zA-Z ]*$/",$prenume))
-        {
-            $prenumeerr="*Numai litere si spatii sunt acceptate la prenume!"."<br>";
-            $eroare=1;
-        }
-    }
+//         if (!preg_match("/^[a-zA-Z ]*$/",$prenume))
+//         {
+//             $prenumeerr="*Numai litere si spatii sunt acceptate la prenume!"."<br>";
+//             $eroare=1;
+//         }
+//     }
 
     // $userName = htmlentities($_POST["userName"]);
     // $password = htmlentities($_POST["password"]);
@@ -65,6 +66,6 @@ if(isset($_SERVER["REQUEST_METHOD"]) == "POST"){
     //     header("Location: ../add_account.php?actionResponse=0");
     // }
 
-}
+// }
 
 ?>

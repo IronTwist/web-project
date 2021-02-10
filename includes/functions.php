@@ -1,9 +1,6 @@
 <?php
 
-function result_select_query($sql, $connection){
-    $result = $connection->query($sql);
-    return $result;
-}
+
 
 function showMessages($array, $user_id){
     for($i=0; $i < count($array); $i++){

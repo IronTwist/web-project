@@ -1,45 +1,68 @@
 <?php
-require_once "../connection/connection_constants.php";
-require_once "../connection/config.php";
-require_once "functions.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/connection/config.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/includes/functions.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/includes/model/User.class.php";
+
 session_start();
 
-$user_field = $_POST["userName"];
-$password_field = $_POST["password"];
+// if (isset($_GET["error"])) {
+//     $error = $_GET["error"];
+//     if ($error == 1) {
+//         echo "<p>Eroare la logare</p>";
+//     }
+// }
 
-$error = $_GET["error"];
-if($error == 1){
-        echo "<p>Eroare la logare</p>";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    if (!empty($_POST["userName"]) && !empty($_POST["password"])) {
+
+        $user_field = $_POST["userName"];
+        $password_field = $_POST["password"];
+
+        $sql = "SELECT * FROM users WHERE userName='".$user_field."' AND password ='".md5($password_field)."'";
+     
+        $result = $connection->query($sql);
+        
+        if($result->num_rows > 0){
+            $row = $result->fetch_assoc();
+            $user = new User(
+                $row["id"],
+                $row["userName"], $row["password"], $row["email"], $row["first_name"], $row["last_name"], $row["sex"],
+                $row["registerDate"], $row["userRole"], $row["birthday"], $row["country"], $row["city"], $row["about"]
+            );
+
+            $_SESSION["user"] = $user;
+            $_SESSION["user"]->setPassword("");
+            $_SESSION["logat"] = TRUE;
+
+            // echo "Emailul tau este: ".$_SESSION["user"]->getEmail(); 
+            header("Location: ../myplace.php");
+        }else{
+            echo "logare esuata";
+            header("Location: ../login.php?message=2");
+        }
+
+    }else{
+        echo "logare esuata";
+        header("Location: ../login.php?message=2");
+    }
+
 }
 
-$result = result_select_query("SELECT * FROM useri WHERE userName='".$user_field."' AND password ='".md5($password_field)."'", $connection);
-
-if ($result->num_rows > 0){
-	
-	while($row = $result->fetch_assoc()){
-
-                $_SESSION["user"] = $user_field;
-                $_SESSION["password"] = md5($password_field);
-                $_SESSION["logat"] = TRUE;
-                $_SESSION["user_id"] = $row["id"];
-                $_SESSION["name"] = $row["name"];
-                $_SESSION["surname"] = $row["prenume"];
-
-                echo "sesiune setata";
-                header("Location: ../myplace.php");
-	}
-	
-}else{
-	echo "Logare eronata, incearca iar!";
-	header("Location: ../login.php?error=1");
+if (isset($_SESSION)) {
+    echo "<pre>";
+    print_r($_SESSION);
+    echo "</pre>";
 }
+
+$connection->close();
 
 ?>
-<!-- 
+
 <script type="text/javascript">
-    console.log(getQueryVariable('error'));
+//     console.log(getQueryVariable('error'));
    
-    if(getQueryVariable("error") == 1){
-        alert();
-    }
-</script> -->
+//     if(getQueryVariable("error") == 1){
+//         alert();
+//     }
+// </script>

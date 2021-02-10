@@ -46,7 +46,7 @@
 
 </html>
 <?php
-    if(isset($conexiune)){
-        $conexiune->close();
+    if(isset($connection)){
+        $connection->close();
     }
 ?>

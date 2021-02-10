@@ -11,9 +11,12 @@
             <li class="nav-item">
                 <a class="nav-link" href="index.php">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="register.php">Register</a>
-            </li>
+
+            <?php if(!isset($_SESSION["logat"]) || $_SESSION["logat"] == false){ ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="register.php">Register</a>
+                </li>
+            <?php } ?>
             <?php if(isset($_SESSION["logat"]) && $_SESSION["logat"] == true){ ?>
                 <li class="nav-item">
                     <a class="nav-link" href="album.php">Photos</a>

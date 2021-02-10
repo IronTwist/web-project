@@ -31,13 +31,15 @@ p.logoText{
 }
 
 .welcome{
-    width: 200px;
-    height: 30px;
+    color:white;
+    font-size: 20px;
     background-color: aliceblue;
-    /* padding-top: 20px; */
     position: absolute;
     top: 120px;
     right: 30px;
+    padding:5px;
+    background-color: darkslateblue;
+    border-radius: 0.5em;
     
 }
 

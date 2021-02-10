@@ -6,19 +6,35 @@ if(isset($_SESSION["user"])){
 }
 
 ?>
+<div class="loginMessage">
+	<?php
+	if(isset($_GET["message"])){
+		if($_GET["message"] == 1){
+			echo "<p>Your account was created, now you can login!</p>";
+		}
+
+		if($_GET["message"] == 2){
+			echo "<p>Logare esuata!</p>";
+		}
+	}else{
+		echo "";
+	}	
+	?>
+</div>
 
 <div class="login">
 	<form action="includes/login_check.php" method="post">
-	 
+	<div class="aroundField">
+	</br>
 	  <input type="text" id="userName" name="userName" placeholder="Username"><br><br>
-	  
 	  <input type="password" id="password" name="password" placeholder="Password"><br><br>
-	  <input type="submit" class="loginBtn" value="Login">
+	  <input id="login" type="submit" value="Login"></br></br>
+	</div>
 	</form>
 	<br>
-	<a href="add_account.php">Create account</a>
-	
-</div>	
+	<!-- <a href="add_account.php">Create account</a> -->
+</div>
+</br>	
 <?php
 require $_SERVER['DOCUMENT_ROOT']."/includes/footer.php";
 ?>
