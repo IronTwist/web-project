@@ -1,30 +1,40 @@
 <?php
-require_once("includes/header.php");
+require $_SERVER['DOCUMENT_ROOT']."/includes/header.php";
+
 if(isset($_SESSION["user"])){
-    header("Location: action_page.php");
+    header("Location: myplace.php");
 }
 
 ?>
+<div class="loginMessage">
+	<?php
+	if(isset($_GET["message"])){
+		if($_GET["message"] == 1){
+			echo "<p>Your account was created, now you can login!</p>";
+		}
 
+		if($_GET["message"] == 2){
+			echo "<p>Logare esuata!</p>";
+		}
+	}else{
+		echo "";
+	}	
+	?>
+</div>
 
-<script type="text/javascript">
-
-    if(getQueryVariable("error") == 1){
-        alert("Userul sau parola introdusa nu este valida!");
-    }
-</script>
 <div class="login">
 	<form action="includes/login_check.php" method="post">
-	  <!-- <label for="userName">Username:</label> -->
+	<div class="aroundField">
+	</br>
 	  <input type="text" id="userName" name="userName" placeholder="Username"><br><br>
-	  <!-- <label for="password">Password:</label> -->
 	  <input type="password" id="password" name="password" placeholder="Password"><br><br>
-	  <input type="submit" class="loginBtn" value="Login">
+	  <input id="login" type="submit" value="Login"></br></br>
+	</div>
 	</form>
 	<br>
-	<a href="add_account.php">Create account</a>
-	<a href="sesiune.php">sesiune</a>
-</div>	
+	<!-- <a href="add_account.php">Create account</a> -->
+</div>
+</br>	
 <?php
-require_once("includes/footer.php");
+require $_SERVER['DOCUMENT_ROOT']."/includes/footer.php";
 ?>

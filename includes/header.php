@@ -1,13 +1,25 @@
 <?php
-    require_once "../mywebsite/connection/connection.php";
-    require_once "../mywebsite/includes/functions.php";
+    $root =$_SERVER['DOCUMENT_ROOT'];
+    require $root."/connection/config.php";
+    require $root."/includes/functions.php";
+    require $root."/includes/model/User.class.php";
+
     session_start();
 ?>
+
+<!-- Developer: Fratean Radu Razvan -->
+
+<!DOCTYPE html>
 <html>
 <head>
 <title>MyPlace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="css/global.css" media="screen"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script src="/css/bootstrap-4.5.3-dist/js/jquery.min.js"></script>
+
+ <!-- Bootstrap CSS -->
+ <link rel="stylesheet" href="/css/bootstrap-4.5.3-dist/css/bootstrap.min.css" >
 
 <script type="text/javascript">
     function getQueryVariable(variable){
@@ -23,16 +35,55 @@
     }
 </script>
 
+<script>
+
+
+let emailExist = 0;
+function checkEmail(emailInput){
+	var email=emailInput.value;
+	var request=new XMLHttpRequest();
+	request.onreadystatechange=function() {
+		if (request.readyState == 4)
+			if (request.status == 200){
+				if(request.responseText=="1"){
+					document.getElementById("email").style.backgroundColor="#52BE80";
+                }    
+				if(request.responseText=="0"){
+					document.getElementById("email").style.backgroundColor="red";
+                }
+                emailExist=parseInt(request.responseText);
+				// console.log("Email:"+email+", emailExist="+emailExist);
+			}
+			else 
+                emailExist=parseInt(0);
+	}
+	request.open("GET","/includes/checkEmail.php?email="+email,true);
+	request.send("");
+}
+
+</script>
+
 </head>
  
 <body>
+<p class="logoText">MyPlace</p>
 <header class="header">
-    <h1 class="bigTitle">MyPlace</h1>
+    <div class="headerLogo">
+            &nbsp;
+    </div>
 
-    <span id="headerLogo" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    </span>
+    <?php
+        if(isset($_SESSION)){
+            if (isset($_SESSION["user"])) {
+                echo "<div class=\"welcome\">Welcome back, ".$_SESSION["user"]->getUserName()."</div>";
+            }
+        }else{
+            echo " ";
+        }
+    ?> 
 </header>
+<?php require $root."/includes/navigation.php"; ?>
+
 <script type="text/javascript">
     error=0;
     if(getQueryVariable(error) == 1){
