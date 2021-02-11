@@ -1,29 +1,37 @@
 <?php
 $root = $_SERVER['DOCUMENT_ROOT'];
-require $root."../includes/header.php";
-require $root."/includes/pagination.class.php";
+require_once $root."../includes/header.php";
+
+$userId =$_SESSION["user"]->getUser_id();
 
 ?>
-
 <section>
 	<div class="addPostForm">
 		<!-- <p>Add new post</p> -->
-	<form action="includes/addPost.php" method="post">
+	<form action="/includes/post.php" method="post">
 		<input class="titleField" type="text" name="title" placeholder="Title here" required>
 		<textarea class="textareaNote" name="postContent" wrap="soft|hard" placeholder="Content here" required></textarea>
-		<input type="hidden" id="user_id" name="user_id" value="<?php $user_id ?>" >
+		<input type="hidden" id="user_id" name="user_id" value="<?php echo $_SESSION["user"]->getUser_id();  ?>" >
 		
 		<div class="categoryTab">
 		<label for="category" style="color: black;">Select category:</label>
+
+		<?php $category = getAllCategory($connection); ?>
 			<select id="category" name="category">
-				<option value="#" selected disabled>Category</option>
-				<option value="IT">IT</option>
-				<option value="Books">Books</option>
-				<option value="Category2">Category2</option>
-				<option value="Category3">Category3</option>
+			<option value="Other" selected>Others</option>
+			<?php for($i=0; $i<sizeof($category); $i++ ){ 
+				echo "<option value=\"$category[$i]\">$category[$i]</option>";
+			}?>
 			</select>
 			<input id="newCategory" type="text" placeholder="Type new category" >
 			<input type="button" class="addCategBtn" onclick="addCategory(document.getElementById('newCategory'))" value="Add" >
+			</br>
+			<label for="publish" style="color: black;">Publish:</label>
+			<select id="publish" name="publish">
+				<option value="public" selected>Public</option>
+				<option value="friends" >Friends Only</option>
+				<option value="private" >Private</option>
+			</select>
 		</div>
 		<br>
 		
@@ -34,8 +42,17 @@ require $root."/includes/pagination.class.php";
 	</form>
 	</div>
 
-	<article>
-		asd
+	<article style="color: white;">
+		<?php
+
+		//Fetching all the posts
+		$posts = getAllPosts($userId);
+		
+		//using function to display all posts with page
+		displayPostsWithPagination($posts, $userId, 4);
+
+
+		?>
 	</article>
 </section>
 
@@ -84,7 +101,7 @@ require $root."/includes/pagination.class.php";
 // 	echo "<a href=\"index.php\" >Back</a>";
 // }
 
-require $root."/includes/footer.php";
+require_once $root."/includes/footer.php";
 ?>
 
 

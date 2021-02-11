@@ -1,93 +1,168 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT']."/connection/config.php";
 
+function getAllCategory($connection){
+    $all_category = [];
+    $sql = "SELECT * FROM category";
 
+    $response = $connection->query($sql);
 
-function showMessages($array, $user_id){
-    for($i=0; $i < count($array); $i++){
-
-	//	if($array[$i]['id_user'] === $user_id){
-			echo $array[$i]['id']." ".$array[$i]['id_user']." : ". $array[$i]['mesaj']."</br>";
-	//	}
-	}
-}
-
-function paginationMessages($array, $user_id, $show_per_page){
-    if (count($array)) {
-        // Create the pagination object
-        $pagination = new pagination($array, (isset($_GET['page']) ? $_GET['page'] : 1), $show_per_page);
-        // Decide if the first and last links should show
-        $pagination->setShowFirstAndLast(false);
-        // You can overwrite the default seperator
-        $pagination->setMainSeperator(' | ');
-        // Parse through the pagination class
-        $messagePages = $pagination->getResults();
-        // If we have items 
-        if (count($messagePages) != 0) {
-          // Create the page numbers
-         $pageNumbers = '<div class="numbers">'.$pagination->getLinks($_GET).'</div>';
-          // Loop through all the items in the array
-          foreach ($messagePages as $messageArray) {
-            // Show the information about the item
-
-                $postDateTime = $messageArray["data"];
-
-                echo "</br>";
-
-                echo "<div class=\"message\">";
-                echo "<h2>".$messageArray["titlu"]."</h2>";
-                echo "<hr>";
-                echo "<a onclick=\"return confirm('Are you sure you want to delete this post?')\" 
-                href=\"action_page.php?clickDelete=".$messageArray["id"]."\" id=\"btnDelete\" 
-                class=\"btnDelete\">&#x2715</a>";
-                echo '<p class="showMessage">'.$messageArray['mesaj'].'</p>';
-                echo "<hr>";
-                echo "A fost postat acum: ".getHowMuchTimePassed($postDateTime)."</br>";
-                
-                echo "</div>";
-               
-          } 
-          // print out the page numbers beneath the results
-          echo "</br>";
-          echo $pageNumbers;
+    if($response->num_rows > 0){
+        while ($row = $response->fetch_assoc()) {
+            if ($row["id_user"] == $_SESSION["user"]->getUser_id()) {
+                array_push($all_category, $row["category"]);
+            }
         }
     }
+
+    return $all_category;
 }
 
-function insert_into_mesaje($id_user, $titlu, $message, $connection){
-    $sql = "INSERT INTO mesaje(id_user, titlu, mesaj) VALUES ('".$id_user."','".$titlu."','".$message."')";
+// function showMessages($array, $user_id){
+//     for($i=0; $i < count($array); $i++){
 
+// 	//	if($array[$i]['id_user'] === $user_id){
+// 			echo $array[$i]['id']." ".$array[$i]['id_user']." : ". $array[$i]['mesaj']."</br>";
+// 	//	}
+// 	}
+// }
+
+function getAllPosts($user_id){
+  global  $connection;
+  $posts = [];
+
+  $sql = "SELECT * FROM posts WHERE id_user='".$user_id."'";
+  $result = $connection->query($sql);
+
+  if($result->num_rows > 0){
+      while($row = $result->fetch_assoc()){
+          array_push($posts, $row);
+      }
+  }
+
+  return $posts;
+}
+
+function numaraPagini($numarElemente, $elPerPage){
+    $countPagini = 0;
+    for($i = 0; $i < $numarElemente; $i++){
+        if($i % $elPerPage == 0 ){
+            $countPagini++;
+        }
+    }
+
+    $pagini = $countPagini;
+    return $pagini;
+}
+
+function displayPostsWithPagination($data, $user_id, $elPerPage){
+
+    if(!isset($_GET["page"])){
+        $_GET["page"] = 1;
+    }
+
+    $numarElemente = count($data);
+    $pagini = 0;
+    $elementPerPage = $elPerPage;
+    $currentPage = $_GET["page"];  //pag 1
+    $nextPage = 0;
+
+    $pagini = numaraPagini($numarElemente, $elementPerPage);
+
+    if(isset($_GET["page"])){
+        $nextPage = $_GET["page"] + 1;
+    }
+
+    if(isset($_GET["page"])){
+        $previousPage = $_GET["page"] - 1;
+    }
+
+    for($p = 1; $p <= $pagini; $p++){
+         
+        if($currentPage == $p){    
+            
+            $startAfisare = ($p-1) * $elementPerPage; 
+            $endAfisare =$startAfisare + $elementPerPage; 
+           
+            while($startAfisare < $endAfisare){
+
+                if(isset($data[$startAfisare])){
+                   
+                    $post = $data[$startAfisare];
+                    $postDateTime = $post["data"];
+
+                    echo "<div class=\"postDisplay\">";
+                    echo "<h3>"."&emsp;".$post["title"]."</h3>";
+                    echo "<hr>";
+                    
+                    echo '<p class="showContent">'.$post['content'].'</p>';
+                    echo "<hr>";
+                    echo "A fost postat acum: ".getHowMuchTimePassed($postDateTime)."</br>";
+                    // echo "</br>";
+                    echo "<hr>";
+                    echo "<br>";
+                    echo "<a onclick=\"return confirm('Are you sure you want to delete this post?')\" 
+                    href=\"myplace.php?clickDelete=".$post["id"]."\" id=\"btnDelete\" 
+                    class=\"btnDelete\">&#x2715</a>";
+                    echo "</div>";
+                    
+                }
+
+                $startAfisare += 1;
+            }
+        }
+    }
+
+    echo "</br>";
+    if($currentPage > 1){
+        echo "<a href=\"myplace.php?page=".$previousPage."\">previousPage</a>"; 
+        echo " | ";
+    }
+        
+    if($currentPage < $pagini){
+        echo "<a href=\"myplace.php?page=".$nextPage."\">nextPage</a>";
+    }
+    if ($currentPage != $pagini) {
+        echo " | <a href=\"myplace.php?page=".$pagini."\">lastpage</a>";
+    }
+
+}
+
+
+function addPost($id_user, $title, $content, $publishedType, $category, $connection){
+    $sql = "INSERT INTO posts(id_user, title, content, published_type, category) VALUES ('".$id_user."','".$title."','".$content."','".$publishedType."','".$category."')";
+    echo $sql;
     if($connection->query($sql) === TRUE){
-        echo "<p>Postarea a fost adaugata cu succes!</p>";
-        header("Location: action_page.php");
+        return TRUE;
     }else{
-        echo "<p class=\"redMessage\">Nu am reusit sa adaug mesajul in baza de date</p";
+        return FALSE;
     }
 }
 
-function insert_into_useri($user_name, $password, $name, $connection){
-    $sql = "INSERT INTO useri(userName, password, name) VALUES ('".$user_name."','".$password."','".$name."')";
+// function insert_into_useri($user_name, $password, $name, $connection){
+//     $sql = "INSERT INTO useri(userName, password, name) VALUES ('".$user_name."','".$password."','".$name."')";
 
-    if($connection->query($sql) === TRUE){
-        echo "User adaugat cu succes";
-    }else{
-        echo "Eroare la adaugarea user-ului";
-    }
-}
+//     if($connection->query($sql) === TRUE){
+//         echo "User adaugat cu succes";
+//     }else{
+//         echo "Eroare la adaugarea user-ului";
+//     }
+// }
 
-function get_all_mesages_for_user($table, $connection, $user_id){
-    $sql = "SELECT * FROM $table WHERE id_user='".$user_id."'";
-    $result = $connection->query($sql);
+// function get_all_mesages_for_user($table, $connection, $user_id){
+//     $sql = "SELECT * FROM $table WHERE id_user='".$user_id."'";
+//     $result = $connection->query($sql);
 
-    $array = array();
+//     $array = array();
 
-			$index = 0;
-			while($row = $result->fetch_assoc()){
-				$array[$index] = $row;
-				$index++;
-			}
+// 			$index = 0;
+// 			while($row = $result->fetch_assoc()){
+// 				$array[$index] = $row;
+// 				$index++;
+// 			}
 
-    return $array;
-}
+//     return $array;
+// }
 
 function get_all_images_for_user($table, $connection, $user_id){
     $sql = "SELECT * FROM $table WHERE user_id='".$user_id."'";
@@ -111,12 +186,12 @@ if(isset($_GET['clickDelete'])){
 
 function delete_message($connection, $id){
     
-    $sql = "DELETE FROM mesaje WHERE id='".$id."'";
+    $sql = "DELETE FROM posts WHERE id='".$id."'";
 
     if($connection->query($sql) === TRUE){
-        header("Location: ../mywebsite/index.php");
+        header("Location: ../myplace.php");
     }else{
-        echo "Mesajul nu exista, poate ca a fost sters.";
+        echo "No post deleted";
     }
 }
 
@@ -197,5 +272,7 @@ function removeDirForUpload($user){
         rmdir($userPathString);
     }
 }
+
+
 
 ?>

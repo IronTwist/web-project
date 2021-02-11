@@ -6,6 +6,9 @@
 
     session_start();
 ?>
+
+<!-- Developer: Fratean Radu Razvan -->
+
 <!DOCTYPE html>
 <html>
 <head>
