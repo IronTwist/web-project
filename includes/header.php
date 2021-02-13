@@ -33,52 +33,32 @@
        }
        return(false);
     }
+   
 </script>
 
-<script>
-
-
-let emailExist = 0;
-function checkEmail(emailInput){
-	var email=emailInput.value;
-	var request=new XMLHttpRequest();
-	request.onreadystatechange=function() {
-		if (request.readyState == 4)
-			if (request.status == 200){
-				if(request.responseText=="1"){
-					document.getElementById("email").style.backgroundColor="#52BE80";
-                }    
-				if(request.responseText=="0"){
-					document.getElementById("email").style.backgroundColor="red";
-                }
-                emailExist=parseInt(request.responseText);
-				// console.log("Email:"+email+", emailExist="+emailExist);
-			}
-			else 
-                emailExist=parseInt(0);
-	}
-	request.open("GET","/includes/checkEmail.php?email="+email,true);
-	request.send("");
-}
-
-</script>
 
 </head>
  
 <body>
 <p class="logoText">MyPlace</p>
 <header class="header">
-    <div class="headerLogo">
+    <?php if(isset($_SESSION["logo_pic"])){ ?>
+    <div class="headerLogo" style="background-image: url(../uploads/admin/<?php echo replaceSpaceWithBackslash($_SESSION["logo_pic"]); ?>" >
             &nbsp;
     </div>
-
+    <?php }else{ ?>
+        <div class="headerLogo">
+            &nbsp;
+        </div> 
+    <?php } ?>   
     <?php
+    
         if(isset($_SESSION)){
             if (isset($_SESSION["user"])) {
-                echo "<div class=\"welcome\">Welcome back, ".$_SESSION["user"]->getUserName()."</div>";
+                echo "<div class=\"welcome\" >Welcome back, <span id=\"usernameLogo\">".$_SESSION["user"]->getUserName()."</span></div>";
+            }else{
+                echo "<div class=\"welcome\">Welcome to <span id=\"usernameLogo\">MySpace</span></div>";
             }
-        }else{
-            echo " ";
         }
     ?> 
 </header>

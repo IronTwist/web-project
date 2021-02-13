@@ -1,5 +1,6 @@
 p.logoText{
     width: 100%;
+    font-size: 2em;
     color: white;
     margin-top: 40px;
     margin-left: 20px;
@@ -8,9 +9,10 @@ p.logoText{
 .header {
     width: 100%;
     height: 170px;
-    background-image: url(../img/green-garden-seamless-pattern-vector.jpg);
-    background-size: 200px;
+    background-image: url(../img/antique.jpg);
+    background-size: 350px;
     background-repeat: repeat;
+    background-position: center;
     border-top-left-radius: 1.5em;
     border-top-right-radius: 1.5em;
     box-shadow: 1px 2px 2px 2px black;
@@ -25,6 +27,8 @@ p.logoText{
     border-radius: 100%; 
     background-color: rgb(133, 133, 236);
     background-image: url(/img/8727.jpg);
+    background-position: center;
+    background-size: cover;
     float: right;
     margin-top: -30px;
     margin-right: 10px;

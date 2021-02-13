@@ -1,31 +1,25 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT']."/connection/config.php";
 
-function getAllCategory($connection){
+function getAllCategoriesOfUser($userId){
+    global $connection;
     $all_category = [];
-    $sql = "SELECT * FROM category";
-
+    $sql = "SELECT * FROM posts WHERE id_user='".$userId."'";
+    
     $response = $connection->query($sql);
 
     if($response->num_rows > 0){
         while ($row = $response->fetch_assoc()) {
-            if ($row["id_user"] == $_SESSION["user"]->getUser_id()) {
-                array_push($all_category, $row["category"]);
-            }
+    
+            array_push($all_category, $row["category"]);
         }
     }
+    $all_category = array_unique($all_category);
+    sort($all_category);
 
     return $all_category;
 }
 
-// function showMessages($array, $user_id){
-//     for($i=0; $i < count($array); $i++){
-
-// 	//	if($array[$i]['id_user'] === $user_id){
-// 			echo $array[$i]['id']." ".$array[$i]['id_user']." : ". $array[$i]['mesaj']."</br>";
-// 	//	}
-// 	}
-// }
 
 function getAllPosts($user_id){
   global  $connection;
@@ -39,7 +33,7 @@ function getAllPosts($user_id){
           array_push($posts, $row);
       }
   }
-
+  $posts = array_reverse($posts);
   return $posts;
 }
 
@@ -55,13 +49,30 @@ function numaraPagini($numarElemente, $elPerPage){
     return $pagini;
 }
 
-function displayPostsWithPagination($data, $user_id, $elPerPage){
+function categoryFilter($data, $categoryFilter){
+    $array = [];
+
+    foreach($data as $d){
+        if($d["category"] == $categoryFilter){
+            array_push($array, $d);
+        }
+    }
+
+    return $array;
+}
+
+function displayPostsWithPagination($data, $user_id, $elPerPage, $categoryFilter){
+
+    if(isset($categoryFilter) && $categoryFilter != ""){
+        $data = categoryFilter($data, $categoryFilter);
+    }
 
     if(!isset($_GET["page"])){
         $_GET["page"] = 1;
     }
-
+    
     $numarElemente = count($data);
+    $_SESSION["totalNumberOfPosts"] = $numarElemente;
     $pagini = 0;
     $elementPerPage = $elPerPage;
     $currentPage = $_GET["page"];  //pag 1
@@ -97,13 +108,16 @@ function displayPostsWithPagination($data, $user_id, $elPerPage){
                     
                     echo '<p class="showContent">'.$post['content'].'</p>';
                     echo "<hr>";
-                    echo "A fost postat acum: ".getHowMuchTimePassed($postDateTime)."</br>";
+                    echo "Data: ".getHowMuchTimePassed($postDateTime)."</br>";
                     // echo "</br>";
                     echo "<hr>";
-                    echo "<br>";
+                    
+                    echo "<div>User: ".$_SESSION["user"]->getUserName()."</div>";
+                    echo "<div>Category: ".$post["category"]."</div>";
                     echo "<a onclick=\"return confirm('Are you sure you want to delete this post?')\" 
                     href=\"myplace.php?clickDelete=".$post["id"]."\" id=\"btnDelete\" 
                     class=\"btnDelete\">&#x2715</a>";
+
                     echo "</div>";
                     
                 }
@@ -139,30 +153,21 @@ function addPost($id_user, $title, $content, $publishedType, $category, $connect
     }
 }
 
-// function insert_into_useri($user_name, $password, $name, $connection){
-//     $sql = "INSERT INTO useri(userName, password, name) VALUES ('".$user_name."','".$password."','".$name."')";
 
-//     if($connection->query($sql) === TRUE){
-//         echo "User adaugat cu succes";
-//     }else{
-//         echo "Eroare la adaugarea user-ului";
-//     }
-// }
+function getAllUserCategory($posts, $userId){
+    $categorys = [];
+    
+    foreach($posts as $post){
+        if($post["id_user"] == $userId && $post["category"] != ""){
+            array_push($categorys, trim($post["category"]));
+        }
+    }
 
-// function get_all_mesages_for_user($table, $connection, $user_id){
-//     $sql = "SELECT * FROM $table WHERE id_user='".$user_id."'";
-//     $result = $connection->query($sql);
+    $categorys = array_unique($categorys);
+    $categorys = array_reverse($categorys);
+    return $categorys;
+}
 
-//     $array = array();
-
-// 			$index = 0;
-// 			while($row = $result->fetch_assoc()){
-// 				$array[$index] = $row;
-// 				$index++;
-// 			}
-
-//     return $array;
-// }
 
 function get_all_images_for_user($table, $connection, $user_id){
     $sql = "SELECT * FROM $table WHERE user_id='".$user_id."'";
@@ -256,7 +261,7 @@ function getHowMuchTimePassed($postDateTime){
 
     $dteDiff  = $dteStart->diff($dteEnd); 
 
-    return $dteDiff->format("%Y ani %M luni %D zile - %H ore %I minute %S secunde");
+    return $dteDiff->format("%YY %Ml %Dz - %HH %Im %Ss");
 }
 
 function makeDirForUpload($user){
@@ -274,5 +279,93 @@ function removeDirForUpload($user){
 }
 
 
+function showUploadedImages($user_name, $user_id){
+    global $connection;
+
+    $sql = "SELECT * FROM images_upload";
+
+    $res = $connection->query($sql);
+
+    if($res->num_rows > 0){
+        while($row = $res->fetch_assoc()){
+            $image_id = $row["id"];
+            $img_name = $row["name"];
+            $img_user_id = $row["user_id"];
+            $img_size = $row["size"];
+
+            if($img_user_id === $user_id){
+                echo "<div class=\"uploadImageDiv\">";
+                
+                echo "<img class=\"uploadImage\" src=\"uploads\\".$user_name."\\prew_".$img_name."\" >";
+                echo "</br></br>";
+                echo "<span class=\"uploadImageTitle\">".substr($img_name, 0, 26)."</span></br></br>";
+                echo "File size: ".round($img_size, 2)." Mb</br>";
+                echo "<a class=\"uploadedImageBtnPrew\" href=\"uploads\\".$user_name."\\".$img_name."\">Full preview</a>";
+                echo "<a class=\"uploadedImageBtnDelete\" href=\"photos.php?img_id_delete=".$image_id."&img_name=".$img_name."\">Delete</a>";
+                echo "</div>";
+            }
+        }
+    }
+}
+
+function deleteUploadedImage($image_id, $user_name, $img_name){
+    $sql = "DELETE FROM images_upload WHERE id=$image_id";
+    global $connection;
+
+    if($connection->query($sql) === TRUE){
+        $path = "uploads/".$user_name."/".$img_name;
+        $path_prew = "uploads/".$user_name."/prew_".$img_name;
+
+        if (file_exists($path)){
+           unlink($path);
+           unlink($path_prew);
+        }else{
+            echo "Nu a mers";
+        }
+
+        header("Location: photos.php");
+    }
+}
+
+
+
+function removeEmptySubFolders($path)
+{
+  $empty=true;
+  foreach (glob($path.DIRECTORY_SEPARATOR."*") as $file)
+  {
+     $empty &= is_dir($file) && RemoveEmptySubFolders($file);
+  }
+  return $empty && rmdir($path);
+}
+
+function getUserLogoPic($userId){
+    global $connection;
+    $sql = "SELECT * FROM profile_pic WHERE user_id='".$userId."'";
+
+    $result = $connection->query($sql);
+
+    if($result->num_rows > 0){
+        $row = $result->fetch_assoc();
+
+        return $row["picture"];
+    }else{
+        return "";
+    }
+}
+
+function replaceSpaceWithBackslash($string){
+    $string = trim($string);
+    $returnString = "";
+    for($i = 0; $i < strlen($string); $i++){
+        if($string[$i] == " "){
+            $returnString .= "\ ";
+        }else{
+            $returnString .= $string[$i]; 
+        }
+    }
+
+    return $returnString;
+}
 
 ?>

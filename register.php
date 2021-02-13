@@ -258,9 +258,9 @@ if(isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
         </div>
         </br>
         <button id="reset" type="reset">Reset</button></br></br>
-        <input id="submit" type="submit" name="submit" value="Submit"></br>
+        <input id="submit" type="submit" name="submit" value="Submit">
     </div>
-</form></br>
+</form>
 <span class="error"> <?php
     echo $usereer;
     echo $passworderr;
@@ -275,6 +275,32 @@ if(isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST"){
 <?php
 }?>
 <script>
+
+function checkEmail(emailInput){
+    let emailExist = 0;
+
+	var email=emailInput.value;
+	var request=new XMLHttpRequest();
+	request.onreadystatechange=function() {
+		if (request.readyState == 4)
+			if (request.status == 200){
+				if(request.responseText=="1"){
+					document.getElementById("email").style.backgroundColor="#52BE80";
+                }    
+				if(request.responseText=="0"){
+					document.getElementById("email").style.backgroundColor="red";
+                }
+                emailExist=parseInt(request.responseText);
+			}
+			else 
+                emailExist=parseInt(0);
+	}
+	request.open("GET","/includes/checkEmail.php?email="+email,true);
+	request.send("");
+}
+
+</script>
+<script>
 function showRequiredPasswordStyle(element){
    document.getElementById("hintPassword").style.display = "block"; 
 }
@@ -283,21 +309,26 @@ $('#password').keyup(function(){
     
     function verific(parola){
         
-        if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[!]/g)){
-            document.getElementById("password").style.backgroundColor = "#52BE80"; 
-        }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[@]/g) && parola.length >= 8){
-            document.getElementById("password").style.backgroundColor = "#52BE80"; 
-        }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[%]/g) && parola.length >= 8){
-            document.getElementById("password").style.backgroundColor = "#52BE80"; 
-        }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[#]/g) && parola.length >= 8){
-            document.getElementById("password").style.backgroundColor = "#52BE80"; 
-        }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[&]/g) && parola.length >= 8){
-            document.getElementById("password").style.backgroundColor = "#52BE80"; 
-        }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[$]/g) && parola.length >= 8){
-            document.getElementById("password").style.backgroundColor = "#52BE80"; 
+        if(parola.length == 0){
+            document.getElementById("password").style.backgroundColor = "white";
         }else{
-            document.getElementById("password").style.backgroundColor = "red";
-        } 
+        
+            if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[!]/g)){
+                document.getElementById("password").style.backgroundColor = "#52BE80"; 
+            }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[@]/g) && parola.length >= 8){
+                document.getElementById("password").style.backgroundColor = "#52BE80"; 
+            }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[%]/g) && parola.length >= 8){
+                document.getElementById("password").style.backgroundColor = "#52BE80"; 
+            }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[#]/g) && parola.length >= 8){
+                document.getElementById("password").style.backgroundColor = "#52BE80"; 
+            }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[&]/g) && parola.length >= 8){
+                document.getElementById("password").style.backgroundColor = "#52BE80"; 
+            }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[$]/g) && parola.length >= 8){
+                document.getElementById("password").style.backgroundColor = "#52BE80"; 
+            }else{
+                document.getElementById("password").style.backgroundColor = "red";
+            } 
+        }    
     }
     
     $("#indicator").html(verific($("#password").val()));
@@ -307,22 +338,27 @@ $('#password').keyup(function(){
 $('#password2').keyup(function(){
     
     function verific(parola){
-        
-        if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[!]/g)){
-            document.getElementById("password2").style.backgroundColor = "#52BE80"; 
-        }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[@]/g) && parola.length >= 8){
-            document.getElementById("password2").style.backgroundColor = "#52BE80"; 
-        }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[%]/g) && parola.length >= 8){
-            document.getElementById("password2").style.backgroundColor = "#52BE80"; 
-        }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[#]/g) && parola.length >= 8){
-            document.getElementById("password2").style.backgroundColor = "#52BE80"; 
-        }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[&]/g) && parola.length >= 8){
-            document.getElementById("password2").style.backgroundColor = "#52BE80"; 
-        }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[$]/g) && parola.length >= 8){
-            document.getElementById("password2").style.backgroundColor = "#52BE80"; 
+
+        if(parola.length == 0){
+            document.getElementById("password2").style.backgroundColor = "white";
         }else{
-            document.getElementById("password2").style.backgroundColor = "red";
-        } 
+        
+            if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[!]/g)){
+                document.getElementById("password2").style.backgroundColor = "#52BE80"; 
+            }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[@]/g) && parola.length >= 8){
+                document.getElementById("password2").style.backgroundColor = "#52BE80"; 
+            }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[%]/g) && parola.length >= 8){
+                document.getElementById("password2").style.backgroundColor = "#52BE80"; 
+            }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[#]/g) && parola.length >= 8){
+                document.getElementById("password2").style.backgroundColor = "#52BE80"; 
+            }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[&]/g) && parola.length >= 8){
+                document.getElementById("password2").style.backgroundColor = "#52BE80"; 
+            }else if(parola.match(/\d/g) && parola.match(/[A-Z]/g) && parola.match(/[a-z]/g) && parola.match(/[$]/g) && parola.length >= 8){
+                document.getElementById("password2").style.backgroundColor = "#52BE80"; 
+            }else{
+                document.getElementById("password2").style.backgroundColor = "red";
+            } 
+        }
     }
     
     $("#indicator").html(verific($("#password2").val()));

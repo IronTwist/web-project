@@ -27,12 +27,12 @@ if(isset($_SESSION["user"])){
 	<div class="aroundField">
 	</br>
 	  <input type="text" id="userName" name="userName" placeholder="Username"><br><br>
-	  <input type="password" id="password" name="password" placeholder="Password"><br><br>
-	  <input id="login" type="submit" value="Login"></br></br>
+	  <input type="password" id="password" name="password" placeholder="Password"><br><br></br>
+	  <input id="login" type="submit" value="Login"></br>
 	</div>
 	</form>
 	<br>
-	<!-- <a href="add_account.php">Create account</a> -->
+	<a href="register.php">Create account</a>
 </div>
 </br>	
 <?php

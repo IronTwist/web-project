@@ -1,10 +1,18 @@
 <?php
 $root = $_SERVER['DOCUMENT_ROOT'];
 require_once $root."../includes/header.php";
+$filter = "";
+$userId = -1;
 
-$userId =$_SESSION["user"]->getUser_id();
+if(isset($_SESSION["user"])){
+	$userId =$_SESSION["user"]->getUser_id();
+}
+if(isset($_GET["filter"])){
+	$filter = $_GET["filter"];
+}
 
 ?>
+
 <section>
 	<div class="addPostForm">
 		<!-- <p>Add new post</p> -->
@@ -16,11 +24,11 @@ $userId =$_SESSION["user"]->getUser_id();
 		<div class="categoryTab">
 		<label for="category" style="color: black;">Select category:</label>
 
-		<?php $category = getAllCategory($connection); ?>
+		<?php $categories = getAllCategoriesOfUser($userId); ?>
 			<select id="category" name="category">
 			<option value="Other" selected>Others</option>
-			<?php for($i=0; $i<sizeof($category); $i++ ){ 
-				echo "<option value=\"$category[$i]\">$category[$i]</option>";
+			<?php foreach($categories as $category){ 
+				echo "<option value=\"$category\">$category</option>";
 			}?>
 			</select>
 			<input id="newCategory" type="text" placeholder="Type new category" >
@@ -35,7 +43,7 @@ $userId =$_SESSION["user"]->getUser_id();
 		</div>
 		<br>
 		
-		<div style="width: 100%; text-align: center;">
+		<div style="width: 100%; text-align: center; margin-top: -15px;">
 		<button class="addFormBtn" type="submit" name="add">Add post</button>
 		<button class="addFormBtn" type="reset">Cancel</button>
 		</div>
@@ -48,58 +56,52 @@ $userId =$_SESSION["user"]->getUser_id();
 		//Fetching all the posts
 		$posts = getAllPosts($userId);
 		
-		//using function to display all posts with page
-		displayPostsWithPagination($posts, $userId, 4);
-
+		//using function to display all posts with page		
+		displayPostsWithPagination($posts, $userId, 4, $filter);
 
 		?>
 	</article>
 </section>
 
 <aside>
-	aici prieteni, postari pe date, etc
+	<div class="asideFriends">
+		<span class="asideTitle">
+			Friends
+		</span>
+		</br></br>
+		<ul>
+			<li>Friend1</li>
+			<li>Friend2</li>
+			<li>Friend3</li>
+			<li>Friend4</li>
+			<li>Friend5</li>
+		</ul>
+	</div>
+		</br>
+	<div class="asideCategory">
+		<span class="asideTitle">
+			Categories
+		</span>
+		<br>
+		<hr class="asideHr">
+		<span style="margin-left: 40px;">Number of posts: <?php if(isset($_SESSION["totalNumberOfPosts"])){ echo $_SESSION["totalNumberOfPosts"]; } ?></span>
+		<ul class="categoryUlFlexBox">
+			<li><a href="myplace.php?filter=">All</a></li>
+			<?php 
+			
+			$userCategorys = getAllUserCategory($posts, $userId);
+			sort($userCategorys);
+			foreach($userCategorys as $category){
+				echo "<li><a href=\"myplace.php?filter=".$category."\">".$category."</a></li>";
+			}
+			
+			?>
+		</ul>
+		</br>
+	</div>
 </aside>
 
 <?php
-// $user = ""; 
-// $user_id = "";
-
-// if(isset($_SESSION["user"])){
-// 	$user = $_SESSION["user"];
-// 	$user_id = $_SESSION["user_id"];
-
-// 	$welcomeUser = "<h4> Welcome back, <span class=\"welcomeUser\">".$user."</span></br></br></h4>";
-// 	echo $welcomeUser;
-
-	
-
-
-	// if(isset($_POST["message"]) && isset($_POST["user_id"])){
-		// $message = $_POST["message"];
-		// $user_id = $_POST["user_id"];
-		// $titlu = $_POST["titlu"];
-
-		// if(empty(trim($message))){
-		// 	echo "<p class=\"redMessage\"> Atentie continutul e gol!</p>";
-		// 	header("Location: myplace.php");
-		// }else if(empty(trim($titlu))){
-		// 	echo "<p class=\"redMessage\"> Atentie	lipseste titlul!</p>";
-		// 	header("Location: myplace.php");
-		// }else{
-		// 	insert_into_mesaje($user_id, $titlu, str_replace("'","\'",$message), $connection);
-		// }
-	// }
-	
-// 	$array_mesaje_from_user = get_all_mesages_for_user("mesaje", $connection, $user_id);
-// 	$array_mesaje_from_user = array_reverse($array_mesaje_from_user);
-
-// 	paginationMessages($array_mesaje_from_user, $user_id, 8);
-
-// }else{
-
-// 	echo "Nu esti logat! </br>";
-// 	echo "<a href=\"index.php\" >Back</a>";
-// }
 
 require_once $root."/includes/footer.php";
 ?>

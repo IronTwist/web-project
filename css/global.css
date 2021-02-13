@@ -3,21 +3,22 @@
 @import "header.css";
 @import "navbar.css";
 @import "register_form.css";
+@import "aside.css";
 
 html {
-    background-image: linear-gradient(rgb(123, 123, 247), black);
+    background-image: radial-gradient(rgb(204, 253, 27), #C3E0E5, #C3E0E5,  #274472);
     padding-top: 30px;
     margin-left: 5px;
     margin-right: 5px;
-    background-image: url(../img/green-garden-seamless-pattern-vector.jpg);
-    background-size: 400px;
+    /* background-image: url(../img/green-garden-seamless-pattern-vector.jpg); */
+    /* background-size: 400px; */
 }
 
 body {
     width: auto;
     min-width: 240px;
     /* background-image: radial-gradient(rgb(137, 137, 243), rgb(137, 137, 243), black); */
-    background-image: radial-gradient(rgb(15, 15, 53), rgb(58, 58, 121), black);
+    background-image: linear-gradient(#0d4f70, #0E86D4, #0E86D4);
     background-size: 100%;
     border-top-left-radius: 5em;
     border-top-right-radius: 5em;
@@ -28,16 +29,12 @@ body {
 section {
     width: 100%;
     height: 100%;
-    /* border: 1px solid black; */
     float: left;
-    /* background-color: antiquewhite; */
     margin-top: 30px;
     margin-bottom: 20px;
-    /* padding: 10px; */
 }
 
 .addPostForm{
-   
     border-radius: 0.5em;
     padding: 5px;
     background-image: url("/img/linegeo2-03-11-01.jpg");
@@ -53,6 +50,7 @@ section {
     height: 30px;
     max-width: 300px;
     border-radius: 1em;
+    border: 0px;
     padding-left: 15px;
 }
 
@@ -60,6 +58,7 @@ section {
     font-family: 'Philosopher', sans-serif;
     width: 100%;
     border-radius: 1em;
+    border: 0px;
     height: 30px;
     margin-left: 0px;
     padding-left: 15px;
@@ -89,14 +88,18 @@ section {
     font-weight: bold;
     color: black;
     background-image: linear-gradient( rgb(137, 137, 243), rgb(255, 255, 255));
+    box-shadow: 1px 1px 1px 1px black;
     margin-right: 10px;
     margin-top: 5px;
     padding: 2px;
     border-radius: 0.5em;
+    border:0px;
 }
 
 .addCategBtn:hover{
+    color:white;
     background-image: linear-gradient(rgb(137, 137, 243), rgb(137, 137, 243), rgb(21, 17, 255));
+    box-shadow: 1px 2px 1px 1px black;
 }
 
 .addFormBtn {
@@ -104,26 +107,22 @@ section {
     font-weight: bold;
     color: black;
     background-image: linear-gradient( rgb(137, 137, 243), rgb(255, 255, 255));
+    box-shadow: 1px 1px 1px 1px black;
     margin-right: 10px;
     padding: 5px;
     border-radius: 0.5em;
+    border:0px;
 }
 
 .addFormBtn:hover {
+    color:white;
     background-image: linear-gradient(rgb(137, 137, 243), rgb(137, 137, 243), rgb(21, 17, 255));
+    box-shadow: 1px 2px 1px 1px black;
 }
 
-
-aside {
-    width: 100%;
-    height: 600px;
-    border: 1px solid black;
-    float: left;
-    background-color: antiquewhite;
-    clear:right;
-    margin-top: 30px;
-    margin-bottom: 20px;
-    padding: 10px;
+.addFormBtn:active{
+    background-color: brown;
+    box-shadow: 2px 3px 1px 1px black;
 }
 
 #headerLogo {
@@ -139,10 +138,11 @@ aside {
     flex-direction: column;
     text-align: center;
     font-family: 'Philosopher', sans-serif;
-    width: 270px;
-    /* background-image: radial-gradient(rgb(255, 255, 255), rgb(184, 184, 235), rgb(20, 20, 219)); */
+    min-width: 270px;
+    max-width: 320px;
+    background-image: radial-gradient( rgb(184, 184, 235), #003060);
     margin-top: 20px;
-    /* margin-left: auto; */
+    margin-left: auto;
     margin-right: auto; 
     padding: 20px;
     padding-top: 30px;
@@ -155,6 +155,8 @@ aside {
     height: 40px;
     border: 0px;
     border-radius: 0.5em;
+    padding-left: 5px;
+    box-shadow: 1px 2px 4px 0px black; 
 }
 
 .login #password {
@@ -162,6 +164,8 @@ aside {
     height: 40px;
     border: 0px;
     border-radius: 0.5em;
+    padding-left: 5px;
+    box-shadow: 1px 2px 4px 0px black; 
 }
 
 .postDisplay {
@@ -169,8 +173,7 @@ aside {
     width: auto;
     font-family: 'Times New Roman', Times, serif, sans-serif;
     font-size: 1em;
-    background-color: white;
-    /* background-image: linear-gradient(to top, rgb(250, 247, 243), rgb(247, 243, 238), rgb(248, 193, 120), rgb(135, 5, 241)); */
+    background-image: radial-gradient(white, white, rgb(236, 236, 236), rgb(230, 229, 231));
     border-radius: 10px;
     padding: 5px;
     padding-top: 10px;
@@ -185,17 +188,16 @@ aside {
     float: right;
     margin-top: -30px;
     text-decoration: none;
-    padding: 5px;
+    padding: 4px;
     color: black;
     background-image: linear-gradient(to bottom, rgb(248, 248, 252), rgb(255, 0, 0));
-    box-shadow: 1px 1px 1px 1px black;
+    box-shadow: 0px 0px 1px 1px black;
     border-radius: 1em;
     animation: normal;
     transition: 0.5s;
 } 
 
 .btnDelete:hover { 
-    /* height: 30px; */
     width: 30px;
     text-align: center;
     color: white;
@@ -219,11 +221,119 @@ h3{
 } 
 
 footer {
+    color: white;
+    text-align: center;
     width: 100%;
     border: 1px solid black;
     clear: left;
-    background-color: antiquewhite;
+    background-color: #4771AC;
+    border-radius: 0.7em;
 }
+
+.footerDiv{
+    text-align: center;
+    color:black;
+    border-radius: 0.7em;
+    width: 100%;
+    height: 100px;
+    /* background-color: blue; */
+    background-image: linear-gradient(#bbbbbb,#d6d6d6,#4771AC);
+    padding-top: 30px;
+}
+
+.uploadImageDiv {
+    display: flex;
+    font-size: 1em;
+    flex-direction: column;
+    text-align: center;
+    align-content: center;
+    padding: 10px;
+    border-radius: 1em;
+    width: 300px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-color: rgb(70, 179, 179);
+    background-image: radial-gradient(white, rgb(207, 207, 207), rgb(134, 130, 130));
+    background-size: 100% 100%;
+    box-shadow: 1px 2px 4px 2px black;
+} 
+
+.uploadImageDiv:hover {
+    box-shadow: 1px 2px 7px 2px black;
+}
+
+.uploadImageTitle {
+    width: 100%; 
+    font-size: 12px;
+    /* max-width: 200px; */
+    border-radius: 1em;
+    animation: normal;
+    transition: 0.3s;
+}
+
+.photosPage{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: 0;
+    background-color: rgba(230, 231, 230, 0.685);
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: white;
+}
+
+.uploadImage{
+    width: 100%;
+    height: auto;
+    animation: normal;
+    transition: 0.5s;
+}
+
+.uploadImage:active {
+    margin-right: 600px;
+    transform: scale(2);
+    border-radius: 0.5em; 
+ }
+
+ .uploadedImageBtnPrew {
+    width: 140px;
+    color: black;
+    font-size: 0.9em;
+    width: 7em;
+    background-color: coral;
+    border: 1px solid black;
+    text-decoration: none;
+    margin-left: 0px;
+    margin-right: auto;
+    margin-bottom: 5px;
+}
+
+.uploadedImageBtnDelete {
+    width: 140px;
+    color: black;
+    font-size: 0.9em;
+    width: 7em;
+    background-color: coral;
+    border: 1px solid black;
+    text-decoration: none;
+    margin-left: auto;
+    margin-right: 0px;
+    margin-bottom: 5px;
+    margin-top: -29px;
+}
+/* .uploadedImageBtn:hover {
+    color: white;
+    background-color: blue;
+} */
+
 
 @media only screen and (min-width: 600px) {
     /* For tablets: */
@@ -261,126 +371,22 @@ footer {
 }
 
 
-
-
-/* 
-h4 {
-    font-family: 'Philosopher', sans-serif;
-    text-align: right;
-    margin-right: 0;
-} */
-
-
-
-/* 
-
-.addAccountDiv {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    border-radius: 2em;
-    margin-left: auto;
-    margin-right: auto;
-    width: 200px;
-    padding: 30px;
-    background-color: blanchedalmond;
-    margin-top: 20px;
-    box-shadow: 0px 2px 8px 1px black;
-}
-
-.welcomeUser {
-    font-size: 30px;
-    font-family: 'Philosopher', sans-serif;
-    font-style: italic;
-}
-
-.redMessage {
-    color: red;
-}
-
-.postareField {
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-} */
-
-/* .aroundNoteForm { */
-    /* border: 1px solid green; */
-    /* background-image: url(../img/linegeo2-03-11-01.jpg);
-    background-size: 200px; */
-    /* background-color: #FBB13C; */
-    /* box-shadow: 1px 2px 4px 2px black;
-    padding: 5px;
-    width: 75%;
-    margin-right: auto;
-    margin-left: auto;
-    border-bottom-right-radius: 1em;
-} */
-
-
-
-
-/* #manageAcc {
-    width: 400px;
-    text-align: center;
-    box-shadow: 1px 2px 4px 2px black;
-} */
-
-/* .deleteAccountBtn { */
-    /* float: right; */
-    /* text-align: right; */
-/* } */
-
-/* .deleteAccountBtn #deleteAccount {
-    height: 40px;
-    color: blue;
-    box-shadow: 1px 2px 4px 2px black;
-    animation: normal;
-    transition: 0.6s;
-    border-radius: 1em;
-} */
-
-/* .deleteAccountBtn #deleteAccount:hover {
-    transform: scale(1.1);
-    color: white;
-    background-color: black;
-    box-shadow: 1px 2px 4px 2px black;
-}
-
-.userAccountDataUpdate {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    background-color: blanchedalmond;
-    width: 60%;
-    min-width: 170px;
-    max-width: 171px;
-    margin-left: auto;
-    margin-right: auto;
-    box-shadow: 1px 2px 4px 2px black;
-} */
-
-/* .userAccountDataUpload {
+.userAccountDataUpload {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 40px; */
-    /* padding-top: 5px; */
-    /* background-color: rgb(88, 35, 187);
+    height: 40px; 
+    padding-top: 5px;
+    background-color: rgb(54, 91, 255);
     box-shadow: 1px 2px 4px 2px black;
     margin-bottom: 20px;
-} */
-
-
-/* body>div.userAccountDataUpload>form {
-    width: 0px;
 }
- */
 
-
-/* .userAccountDataUpload .choose {
+.userAccountDataUpload .choose {
     margin-top: 20px;
     margin-left: -230px;
-} */
-/* 
+}
+
 #fileToUpload {
     width: 250px;
 }
@@ -388,7 +394,7 @@ h4 {
 .userAccountDataUpload .add {
     width: 70px;
     height: 30px;
-    margin-top: 5px;
+    /* margin-top: 5px; */
     animation: normal;
     transition: 0.2s;
 }
@@ -398,98 +404,5 @@ h4 {
     background-color: rgb(19, 12, 2);
 }
 
-.userAccountDataUpload h2 {
-    color: white;
-    width: 200px;
-    text-align: center;
-    height: 30px;
-    box-shadow: 1px 2px 4px 2px black;
-} */
 
-/* .selectLogo {
-    width: 150px;
-}
 
-.showPicturesDiv {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-left: 5%;
-    align-self: center;
-}
-
-.uploadImageDiv {
-    display: flex;
-    font-size: 1.2em;
-    flex-direction: column;
-    text-align: center;
-    align-content: center;
-    padding: 10px;
-    border-radius: 1em;
-    width: 300px;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    background-color: aqua;
-    background-image: url(../img/Circle_vw_G-4-G8\(12\).jpg);
-    background-size: 100% 100%;
-    box-shadow: 1px 2px 4px 2px black;
-} */
-/* 
-.uploadImage {
-    width: 100%; */
-    /* max-width: 200px; */
-    /* border-radius: 1em;
-    animation: normal;
-    transition: 0.3s;
-} */
-/* 
-.uploadImage:active {
-    margin-right: 600px;
-    transform: scale(2);
-    border-radius: 0em; */
-    /* transform-origin: -50%; */
-/* } */
-
-/* .uploadedImageBtn {
-    width: 140px;
-    color: black;
-    font-size: 0.9em;
-    background-color: coral;
-    border: 1px solid black;
-    text-decoration: none;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 5px;
-}
-
-.uploadedImageBtn:hover {
-    color: white;
-    background-color: blue;
-}
-
-#imagePaginationNavigation .numbers {
-    background-image: linear-gradient(to top, white, rgb(243, 216, 216));
-    box-shadow: 1px 2px 5px 2px black;
-    border-radius: 1em;
-    text-align: center;
-    font-size: 20px;
-    padding: 5px;
-} */
-
-/* .footer {
-    text-align: center;
-    color: white;
-    width: 100%;
-    height: 20px;
-    background-image: linear-gradient(to right, rgb(76, 0, 255), rgb(46, 46, 180), rgb(1, 1, 124));
-    border-bottom-right-radius: 100%;
-    border-bottom-left-radius: 100%;
-    box-shadow: 1px 2px 2px 2px black;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.footer a {
-    color: white;
-    text-decoration: none;
-} */

@@ -19,16 +19,16 @@
             <?php } ?>
             <?php if(isset($_SESSION["logat"]) && $_SESSION["logat"] == true){ ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="album.php">Photos</a>
+                    <a class="nav-link" href="index.php">MyPlace</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="my_posts">Posts</a>
+                    <a class="nav-link" href="photos.php">Photos</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="my_posts">Friends</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="profile">Profile</a>
+                    <a class="nav-link" href="profile.php">Profile</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="logout.php">Logout</a>

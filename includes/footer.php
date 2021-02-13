@@ -1,6 +1,9 @@
 <footer>
-    <div><a href="#headerLogo">Back to the top</a></div>
-    <div style="text-align: right;">by Fratean Razvan</div>
+    <div class="footerDiv">
+        text | text | text | text
+    </div>
+    <!-- <div><a href="#headerLogo">Back to the top</a></div>-->
+    <div>Under construction by Fratean Razvan</div> 
 </footer>
 
     <script src="/css/bootstrap-4.5.3-dist/js/popper.min.js"></script>
@@ -41,7 +44,9 @@
             
         }
 
+       
     </script>
+    <script type="text/javascript" src="/javascript/functions.js"></script>
 </body>
 
 </html>

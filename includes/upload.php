@@ -1,5 +1,6 @@
 <?php
-require_once "../../mywebsite/connection/connection.php";
+$root = $_SERVER['DOCUMENT_ROOT'];
+require_once $root."/connection/config.php";
 
 $userId = htmlspecialchars($_GET["user_id"]);
 $userName = htmlspecialchars($_GET["user"]);
@@ -60,14 +61,6 @@ function create_prew_file($file, $max_resolution, $imageFileType, $target_dir, $
 
     $new_height = $orig_height * $r;
 
-
-    //other step to reduce
-    // if($new_height > $max_resolution){
-    //   $r = $$max_resolution / $$orig_height;
-    //   $new_height = $$max_resolution;
-    //   $new_width = $$orig_width * $r;
-    // }
-
     if($original_image){
       $new_image = imagecreatetruecolor($new_width, $new_height);
       imagecopyresampled($new_image, $original_image, 0, 0, 0, 0, $new_width,$new_height, $orig_width, $orig_height);
@@ -93,7 +86,7 @@ function create_prew_file($file, $max_resolution, $imageFileType, $target_dir, $
     $new_height = $orig_height * $r;
 
 
-    //other step to reduce
+    //reduce pic size
     if($new_height > $max_resolution){
       $r = $$max_resolution / $$orig_height;
       $new_height = $$max_resolution;
@@ -125,7 +118,7 @@ function create_prew_file($file, $max_resolution, $imageFileType, $target_dir, $
     $new_height = $orig_height * $r;
 
 
-    //other step to reduce
+    //reduce size
     if($new_height > $max_resolution){
       $r = $$max_resolution / $$orig_height;
       $new_height = $$max_resolution;
