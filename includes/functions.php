@@ -368,4 +368,106 @@ function replaceSpaceWithBackslash($string){
     return $returnString;
 }
 
+function getAllUsers(){
+    global $connection;
+    $users = [];
+
+    $sql = "SELECT * FROM users";
+
+    $result = $connection->query($sql);
+
+    if($result->num_rows > 0){
+        while($row = $result->fetch_assoc()){
+            $user = new User(
+                $row["id"],
+                $row["userName"], $row["password"], $row["email"], $row["first_name"], $row["last_name"], $row["sex"],
+                $row["registerDate"], $row["userRole"], $row["birthday"], $row["country"], $row["city"], $row["about"]
+            );
+
+            array_push($users, $user);
+        }
+    }
+
+    return $users;
+}
+
+
+function userProfilePic($user_id, $userName){
+    global $connection;
+
+    $sql = "SELECT picture FROM profile_pic WHERE user_id=$user_id";
+
+    $result = $connection->query($sql);
+
+    if($result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        $pictureName = replaceSpaceWithBackslash($row["picture"]);
+        return "url(uploads/".$userName."/".$pictureName.")";
+    }
+
+    return "";
+}
+
+function getRequestsReceived($user_id_to_check){
+    global $connection;
+    $userIdsSender = [];
+
+    $sql = "SELECT * FROM friends WHERE friend_id_receiver=$user_id_to_check";
+   
+    $response = $connection->query($sql);
+
+    if($response->num_rows > 0){
+        while($row = $response->fetch_assoc()){
+            if ($row["request_approved"] == 0) {
+                array_push($userIdsSender, $row["user_id_sender"]);
+            }
+        }
+    }
+
+    return $userIdsSender;
+}
+
+function acceptUserFriendship($userIdFriend, $myUserId){
+    global $connection;
+
+    $sql = "SELECT * FROM friends WHERE user_id_sender=$userIdFriend AND friend_id_receiver=$myUserId";
+
+    // echo $sql;
+
+    $response = $connection->query($sql);
+
+    if($response){
+        $row = $response->fetch_assoc();
+        // echo $row["id"];
+        $id = $row["id"];
+        if ($row["request_approved"] == false) {
+            $sqlUpdate = "UPDATE friends SET request_approved=true WHERE id=$id";
+
+            $connection->query($sqlUpdate);
+        }
+    }
+
+}
+
+function getAllFriendships(){
+    global $connection;
+    $friendships = [];
+
+    $sql = "SELECT * FROM friends";
+
+    $result = $connection->query($sql);
+
+    if($result->num_rows > 0){
+        while($row = $result->fetch_assoc()){
+            //TODO for button show or not merge view user and friends
+            array_push($friendships, $row);
+            
+        }
+    }
+    // print_r($friendships["id"]);
+
+    // die();
+    return $friendships;
+}
+
 ?>

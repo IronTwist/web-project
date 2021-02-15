@@ -4,13 +4,14 @@ p.logoText{
     color: white;
     margin-top: 40px;
     margin-left: 20px;
+    text-shadow: 2px 5px 4px black;
 }
 
 .header {
     width: 100%;
     height: 170px;
-    background-image: url(../img/antique.jpg);
-    background-size: 350px;
+    background-image: url(../img/antique2.jpg);
+    background-size: 250px;
     background-repeat: repeat;
     background-position: center;
     border-top-left-radius: 1.5em;
@@ -21,8 +22,8 @@ p.logoText{
 }
 
 .headerLogo {
-    width: 160px;
-    height: 160px;
+    width: 190px;
+    height: 190px;
     background-size: contain;
     border-radius: 100%; 
     background-color: rgb(133, 133, 236);
@@ -30,8 +31,9 @@ p.logoText{
     background-position: center;
     background-size: cover;
     float: right;
-    margin-top: -30px;
+    margin-top: -50px;
     margin-right: 10px;
+    
 }
 
 .welcome{
@@ -44,6 +46,6 @@ p.logoText{
     padding:5px;
     background-color: darkslateblue;
     border-radius: 0.5em;
-    
+    text-shadow: 2px 5px 4px black;
 }
 

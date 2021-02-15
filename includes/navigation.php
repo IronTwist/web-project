@@ -9,7 +9,7 @@
     <div class="collapse navbar-collapse" id="myNav">
         <ul class="navbar-nav mr-auto ">
             <li class="nav-item">
-                <a class="nav-link" href="index.php">Home</a>
+                <a class="nav-link" href="home_place.php">Home</a>
             </li>
 
             <?php if(!isset($_SESSION["logat"]) || $_SESSION["logat"] == false){ ?>
@@ -25,7 +25,7 @@
                     <a class="nav-link" href="photos.php">Photos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="my_posts">Friends</a>
+                    <a class="nav-link" href="friends.php">Friends</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="profile.php">Profile</a>

@@ -4,6 +4,7 @@
 @import "navbar.css";
 @import "register_form.css";
 @import "aside.css";
+@import "home.css";
 
 html {
     background-image: radial-gradient(rgb(204, 253, 27), #C3E0E5, #C3E0E5,  #274472);

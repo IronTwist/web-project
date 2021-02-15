@@ -43,7 +43,7 @@
 <p class="logoText">MyPlace</p>
 <header class="header">
     <?php if(isset($_SESSION["logo_pic"])){ ?>
-    <div class="headerLogo" style="background-image: url(../uploads/admin/<?php echo replaceSpaceWithBackslash($_SESSION["logo_pic"]); ?>" >
+    <div class="headerLogo" style="background-image: url(../uploads/admin/<?php echo "prew_". replaceSpaceWithBackslash($_SESSION["logo_pic"]); ?>" >
             &nbsp;
     </div>
     <?php }else{ ?>
@@ -57,7 +57,7 @@
             if (isset($_SESSION["user"])) {
                 echo "<div class=\"welcome\" >Welcome back, <span id=\"usernameLogo\">".$_SESSION["user"]->getUserName()."</span></div>";
             }else{
-                echo "<div class=\"welcome\">Welcome to <span id=\"usernameLogo\">MySpace</span></div>";
+                echo "<div class=\"welcome\">Welcome to <span id=\"usernameLogo\">MyPlace</span></div>";
             }
         }
     ?> 
