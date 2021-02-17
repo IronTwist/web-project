@@ -1,6 +1,25 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT']."/connection/config.php";
 
+function getAllCategories(){
+    global $connection;
+    $all_category = [];
+    $sql = "SELECT * FROM posts";
+    
+    $response = $connection->query($sql);
+
+    if($response->num_rows > 0){
+        while ($row = $response->fetch_assoc()) {
+    
+            array_push($all_category, $row["category"]);
+        }
+    }
+    $all_category = array_unique($all_category);
+    sort($all_category);
+
+    return $all_category;
+}
+
 function getAllCategoriesOfUser($userId){
     global $connection;
     $all_category = [];
@@ -20,8 +39,24 @@ function getAllCategoriesOfUser($userId){
     return $all_category;
 }
 
+function getAllPosts(){
+    global  $connection;
+    $posts = [];
 
-function getAllPosts($user_id){
+    $sql = "SELECT * FROM posts";
+    $result = $connection->query($sql);
+
+    if($result->num_rows > 0){
+        while($row = $result->fetch_assoc()){
+            array_push($posts, $row);
+        }
+    }
+    $posts = array_reverse($posts); //to get last inserted first
+    return $posts;
+}
+
+
+function getAllUserPosts($user_id){
   global  $connection;
   $posts = [];
 
@@ -53,7 +88,7 @@ function categoryFilter($data, $categoryFilter){
     $array = [];
 
     foreach($data as $d){
-        if($d["category"] == $categoryFilter){
+        if($d["category"] === $categoryFilter){
             array_push($array, $d);
         }
     }
@@ -128,18 +163,109 @@ function displayPostsWithPagination($data, $user_id, $elPerPage, $categoryFilter
     }
 
     echo "</br>";
+    if ($currentPage == $pagini) {
+        echo "<a href=\"home_place.php?filter=".$categoryFilter."&page=".$pagini-($pagini-1)."\">firstPage</a>  |  ";
+    }
+
     if($currentPage > 1){
-        echo "<a href=\"myplace.php?page=".$previousPage."\">previousPage</a>"; 
+        echo "<a href=\"myplace.php?filter=".$categoryFilter."&page=".$previousPage."\">previousPage</a>"; 
         echo " | ";
     }
         
     if($currentPage < $pagini){
-        echo "<a href=\"myplace.php?page=".$nextPage."\">nextPage</a>";
+        echo "<a href=\"myplace.php?filter=".$categoryFilter."&page=".$nextPage."\">nextPage</a>";
     }
     if ($currentPage != $pagini) {
-        echo " | <a href=\"myplace.php?page=".$pagini."\">lastpage</a>";
+        echo " | <a href=\"myplace.php?filter=".$categoryFilter."&page=".$pagini."\">lastpage</a>";
     }
 
+}
+
+function displayPostsWithPaginationHome($data, $elPerPage, $categoryFilter){
+    if(isset($categoryFilter) && $categoryFilter != ""){
+        $data = categoryFilter($data, $categoryFilter);
+    }
+
+    if(!isset($_GET["page"])){
+        $_GET["page"] = 1;
+    }
+    
+    $numarElemente = count($data);
+    $_SESSION["totalNumberOfPosts"] = $numarElemente;
+    $pagini = 0;
+    $elementPerPage = $elPerPage;
+    $currentPage = $_GET["page"];  //pag 1
+    $nextPage = 0;
+
+    $pagini = numaraPagini($numarElemente, $elementPerPage);
+
+    if(isset($_GET["page"])){
+        $nextPage = $_GET["page"] + 1;
+    }
+
+    if(isset($_GET["page"])){
+        $previousPage = $_GET["page"] - 1;
+    }
+
+    for($p = 1; $p <= $pagini; $p++){
+         
+        if($currentPage == $p){    
+            
+            $startAfisare = ($p-1) * $elementPerPage; 
+            $endAfisare =$startAfisare + $elementPerPage; 
+           
+            while($startAfisare < $endAfisare){
+
+                if(isset($data[$startAfisare])){
+                   
+                    $post = $data[$startAfisare];
+                    $postDateTime = $post["data"];
+
+                    echo "<div class=\"postDisplay\">";
+                    echo "<h3>"."&emsp;".$post["title"]."</h3>";
+                    echo "<hr>";
+                    
+                    echo '<p class="showContent">'.$post['content'].'</p>';
+                    echo "<hr>";
+                    echo "Data: ".getHowMuchTimePassed($postDateTime)."</br>";
+                    // echo "</br>";
+                    echo "<hr>";
+                    
+                    echo "<div>Post by ".getUserData($post["id_user"],"username")."</div>";
+                    echo "<div>Category: ".$post["category"]."</div>";
+                   
+                    echo "</div>";
+                    
+                }
+
+                $startAfisare += 1;
+            }
+        }
+    }
+    echo "</br>";
+        ?>
+        <div style="width: 100%; text-align: center;"><?php echo $currentPage." / ".$pagini ?></div>
+        <?php
+    echo "</br>";
+    echo "<div class=\"paginationNavBar\">";
+    if ($currentPage == $pagini && $elementPerPage < $numarElemente) {
+        echo "<a href=\"home_place.php?filter=".$categoryFilter."&page=".$pagini-($pagini-1)."\">first-Page</a>  |  ";
+    }
+
+    if($currentPage > 1){
+        echo "<a href=\"home_place.php?filter=".$categoryFilter."&page=".$previousPage."\">previous-Page</a>"; 
+        echo " | ";
+    }
+        
+    if($currentPage < $pagini){
+        echo "<a href=\"home_place.php?filter=".$categoryFilter."&page=".$nextPage."\">next-Page</a>";
+    }
+
+    if ($currentPage != $pagini) {
+        echo " | <a href=\"home_place.php?filter=".$categoryFilter."&page=".$pagini."\">last-page</a>";
+    }
+    echo "</div>";
+    
 }
 
 
@@ -297,11 +423,14 @@ function showUploadedImages($user_name, $user_id){
                 echo "<div class=\"uploadImageDiv\">";
                 
                 echo "<img class=\"uploadImage\" src=\"uploads\\".$user_name."\\prew_".$img_name."\" >";
-                echo "</br></br>";
-                echo "<span class=\"uploadImageTitle\">".substr($img_name, 0, 26)."</span></br></br>";
-                echo "File size: ".round($img_size, 2)." Mb</br>";
-                echo "<a class=\"uploadedImageBtnPrew\" href=\"uploads\\".$user_name."\\".$img_name."\">Full preview</a>";
-                echo "<a class=\"uploadedImageBtnDelete\" href=\"photos.php?img_id_delete=".$image_id."&img_name=".$img_name."\">Delete</a>";
+
+                echo "<div class=\"uploadImageTitle\">".substr($img_name, 0, 26)."</div>";
+                echo "<div>File size: ".round($img_size, 2)." Mb</div>";
+                echo "<div class=\"photoNavBtns\">";
+                echo "<a class=\"uploadedImageBtn\" href=\"uploads\\".$user_name."\\".$img_name."\">Full preview</a>";
+                echo "<a class=\"uploadedImageBtn\" href=\"photos.php?img_id_delete=".$image_id."&img_name=".$img_name."\">Delete</a>";
+                echo "<a class=\"uploadedImageBtn\" href=\"photos.php?profile_set_img=".$img_name."\">Set as profile</a>";
+                echo "</div>";
                 echo "</div>";
             }
         }
@@ -391,6 +520,14 @@ function getAllUsers(){
     return $users;
 }
 
+function createUserProfilePic($user_id){
+    global $connection;
+
+    $sql = "INSERT INTO profile_pic(user_id, picture) VALUES ($user_id, 'none')";
+    $connection->query($sql);
+
+}
+
 
 function userProfilePic($user_id, $userName){
     global $connection;
@@ -412,14 +549,15 @@ function getRequestsReceived($user_id_to_check){
     global $connection;
     $userIdsSender = [];
 
-    $sql = "SELECT * FROM friends WHERE friend_id_receiver=$user_id_to_check";
+    $sql = "SELECT * FROM friend_request WHERE friend_id_receiver=$user_id_to_check";
    
     $response = $connection->query($sql);
 
     if($response->num_rows > 0){
         while($row = $response->fetch_assoc()){
             if ($row["request_approved"] == 0) {
-                array_push($userIdsSender, $row["user_id_sender"]);
+                // array_push($userIdsSender, $row["user_id_sender"]);
+                array_push($userIdsSender, $row);
             }
         }
     }
@@ -427,47 +565,188 @@ function getRequestsReceived($user_id_to_check){
     return $userIdsSender;
 }
 
-function acceptUserFriendship($userIdFriend, $myUserId){
+function acceptUserFriendship($userIdFriend, $myUserId, $accept_flag){
     global $connection;
 
-    $sql = "SELECT * FROM friends WHERE user_id_sender=$userIdFriend AND friend_id_receiver=$myUserId";
-
-    // echo $sql;
-
+    $sql = "SELECT * FROM friend_request WHERE user_id_sender=$userIdFriend AND friend_id_receiver=$myUserId";
+    
     $response = $connection->query($sql);
 
     if($response){
         $row = $response->fetch_assoc();
-        // echo $row["id"];
-        $id = $row["id"];
-        if ($row["request_approved"] == false) {
-            $sqlUpdate = "UPDATE friends SET request_approved=true WHERE id=$id";
+        
+        if (isset($row["id"])) {
+            $id = $row["id"];
+            if ($row["request_approved"] == false && $accept_flag == "ACCEPT") {
+                $sqlUpdate = "UPDATE friend_request SET request_approved=true WHERE id=$id";
+               
+                $connection->query($sqlUpdate);
+                updateFrindshipConnection($myUserId, $userIdFriend, $accept_flag);
+            }
 
-            $connection->query($sqlUpdate);
+            if ($row["request_approved"] == false && $accept_flag == "REMOVE") {
+               
+                updateFrindshipConnection($myUserId, $userIdFriend, $accept_flag);
+            }
         }
+    }
+}
+
+//add friendship connection
+/**
+ * String $accept_flag = "ACCEPT" / "REMOVE"
+ *
+ * @param [type] $user_id
+ * @param [type] $friend_id
+ * @param String $accept_flag 
+ * @return void
+ */
+function updateFrindshipConnection($user_id, $friend_id, $accept_flag){
+    global $connection;
+
+    if ($accept_flag == "ACCEPT") {
+        $sql = "INSERT INTO friends(user_id, friend_id) VALUES ($user_id, $friend_id)";
+
+        $connection->query($sql);
+
+        $sql = "INSERT INTO friends(user_id, friend_id) VALUES ($friend_id, $user_id)";
+
+        $connection->query($sql);
+    }
+
+    if($accept_flag == "REMOVE"){
+        // DELETE requests
+        $sql = "DELETE FROM friend_request WHERE user_id_sender=$friend_id AND friend_id_receiver=$user_id";
+        $connection->query($sql);
+
+        $sql = "DELETE FROM friend_request WHERE user_id_sender=$user_id AND friend_id_receiver=$friend_id";
+        $connection->query($sql);
     }
 
 }
 
-function getAllFriendships(){
+function getAllFriendships($user_id){
     global $connection;
-    $friendships = [];
+    $friendsId = [];
 
-    $sql = "SELECT * FROM friends";
+    $sql = "SELECT * FROM friends WHERE user_id=$user_id";
 
     $result = $connection->query($sql);
 
     if($result->num_rows > 0){
         while($row = $result->fetch_assoc()){
-            //TODO for button show or not merge view user and friends
-            array_push($friendships, $row);
-            
+           
+            array_push($friendsId, $row["friend_id"]);
+
         }
     }
-    // print_r($friendships["id"]);
+    
+    return $friendsId;
+}
 
-    // die();
-    return $friendships;
+function removeFriend($user_id, $friend_id){
+    global $connection;
+
+    //Delete all possible connections 
+
+    $sql = "DELETE FROM friends WHERE user_id=$user_id AND friend_id=$friend_id";
+    $connection->query($sql);
+
+    $sql = "DELETE FROM friends WHERE user_id=$friend_id AND friend_id=$user_id";
+    $connection->query($sql);
+
+    //Delete all possible requests between users
+
+    $sql = "DELETE FROM friend_request WHERE user_id_sender=$friend_id AND friend_id_receiver=$user_id";
+    $connection->query($sql);
+
+    $sql = "DELETE FROM friend_request WHERE user_id_sender=$user_id AND friend_id_receiver=$friend_id";
+    $connection->query($sql);
+
+}
+
+function checkIfRequestWasSent($myUserId, $userIdFriend){
+    global $connection;
+
+    $sql = "SELECT * FROM friend_request WHERE user_id_sender=$myUserId AND friend_id_receiver=$userIdFriend";
+    
+    $result = $connection->query($sql);
+    
+    if($result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        if($row["send_request_friend"] == TRUE && $row["request_approved"] == FALSE){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    return FALSE;
+}
+
+function checkIfRequestWasReceived($myUserId, $userIdFriend){
+    global $connection;
+
+    $sql = "SELECT * FROM friend_request WHERE user_id_sender=$userIdFriend AND friend_id_receiver=$myUserId";
+    
+    $result = $connection->query($sql);
+    
+    if($result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        if($row["send_request_friend"] == TRUE && $row["request_approved"] == FALSE){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }
+
+    return FALSE;
+}
+
+function setImageAsProfilePhoto($userId, $picName){
+    global $connection;
+
+    $sql = "UPDATE profile_pic SET picture='$picName' WHERE user_id=$userId";
+    
+    $res = $connection->query($sql);
+    if($res){
+        $_SESSION["logo_pic"] = $picName;
+        header("Location: photos.php");
+    }else{
+        header("Location: photos.php");
+    }
+}
+
+function getUserData($id_user, $flag){
+    global $connection;
+    $returnString = "";
+
+    $sql = "SELECT * FROM users WHERE id=$id_user";
+    
+    $res = $connection->query($sql);
+
+    if($res->num_rows > 0){
+        $row = $res->fetch_assoc();
+
+        if ($flag === "email") {
+            $returnString = $row["email"];
+            return $returnString;
+        }
+
+        if ($flag === "first_name") {
+            $returnString = $row["first_name"];
+            return $returnString;
+        }
+
+        if ($flag === "username") {
+            $returnString = $row["userName"];
+            return $returnString;
+        }
+
+        
+    }
+
+    return "";
 }
 
 ?>

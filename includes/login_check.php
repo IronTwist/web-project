@@ -34,9 +34,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["user"] = $user;
             $_SESSION["user"]->setPassword("");
             $_SESSION["logat"] = TRUE;
+
+
             $_SESSION["logo_pic"] = getUserLogoPic($row["id"]);
 
-            // echo "Emailul tau este: ".$_SESSION["user"]->getEmail(); 
+            if(empty($_SESSION["logo_pic"])){
+                createUserProfilePic($user->getUser_id());
+            }
+
             header("Location: ../myplace.php");
         }else{
             echo "logare esuata";

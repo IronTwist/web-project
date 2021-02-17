@@ -1,4 +1,6 @@
+<h1>Just for debugging</h1>
 <?php
+
 
     session_start();
 

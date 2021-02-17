@@ -1,0 +1,48 @@
+.showUsersOnFrindsPage{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 40%;
+    height: 100%;
+    /* border: 1px solid black; */
+    align-content: center;
+    margin-bottom: 20px;
+    background-image: radial-gradient( rgb(184, 184, 235), #003060);
+}
+
+.showUserFriend{
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5em;
+    width: 150px;
+    height: 120px;
+    border: 1px solid white;
+    margin: 5px auto;
+    background-size: 150px;
+    background-position: center;
+    background-repeat: no-repeat;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 2px 2px 6px 2px black;
+}
+
+.showUserFriendOnMyPlace{
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5em;
+    width: 150px;
+    height: 120px;
+    border: 1px solid white;
+    /* margin: 5px auto; */
+    background-size: 150px;
+    background-position: center;
+    background-repeat: no-repeat;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 2px 2px 6px 2px black;
+}
+
+.removeFriend{
+    color: white;
+    margin:5px;
+}

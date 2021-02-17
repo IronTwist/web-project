@@ -6,10 +6,14 @@ $userId = -1;
 
 if(isset($_SESSION["user"])){
 	$userId =$_SESSION["user"]->getUser_id();
+}else{
+	header("Location: login.php");
 }
+
 if(isset($_GET["filter"])){
 	$filter = $_GET["filter"];
 }
+
 
 ?>
 
@@ -53,8 +57,8 @@ if(isset($_GET["filter"])){
 	<article style="color: white;">
 		<?php
 
-		//Fetching all the posts
-		$posts = getAllPosts($userId);
+		//Fetching all user the posts
+		$posts = getAllUserPosts($userId);
 		
 		//using function to display all posts with page		
 		displayPostsWithPagination($posts, $userId, 4, $filter);
@@ -64,18 +68,40 @@ if(isset($_GET["filter"])){
 </section>
 
 <aside>
-	<div class="asideFriends">
+	<div class="asideFriendsonMyPLace">
 		<span class="asideTitle">
 			Friends
 		</span>
 		</br></br>
-		<ul>
-			<li>Friend1</li>
-			<li>Friend2</li>
-			<li>Friend3</li>
-			<li>Friend4</li>
-			<li>Friend5</li>
-		</ul>
+		<?php
+        if (isset($_SESSION["user"])) {
+            $users = getAllUsers();
+
+            foreach ($users as $user) {
+                if ($user->getUser_id() != $_SESSION["user"]->getUser_id()) { //other users 
+                    
+                    $frindsId = getAllFriendships($_SESSION["user"]->getUser_id()); //get all my friends id's
+
+                    foreach ($frindsId as $friendId) {
+
+                        if ($user->getUser_id() == $friendId) { //show if is a friend
+                   ?>
+                    <div class="showUserFriendOnMyPlace" style="background-image: <?php echo userProfilePic($user->getUser_id(), $user->getUserName()); ?>;">
+                    <div><?php echo $user->getUserName(); ?></div></br>
+                       
+                    </div>  
+                 <?php
+                        }
+                    } 
+                    ?> 
+                 
+                 <?php  
+                }// end if
+            } //end foreach $users
+        }else{
+            header("Location: login.php");
+        }
+        ?>
 	</div>
 		</br>
 	<div class="asideCategory">

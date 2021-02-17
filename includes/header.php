@@ -43,7 +43,7 @@
 <p class="logoText">MyPlace</p>
 <header class="header">
     <?php if(isset($_SESSION["logo_pic"])){ ?>
-    <div class="headerLogo" style="background-image: url(../uploads/admin/<?php echo "prew_". replaceSpaceWithBackslash($_SESSION["logo_pic"]); ?>" >
+    <div class="headerLogo" style="background-image: url(../uploads/<?php echo $_SESSION["user"]->getUserName(); ?>/<?php echo "prew_". replaceSpaceWithBackslash($_SESSION["logo_pic"]); ?>" >
             &nbsp;
     </div>
     <?php }else{ ?>

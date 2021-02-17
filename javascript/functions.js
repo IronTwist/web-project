@@ -29,3 +29,10 @@ function changeUserLogo(value){
 
 var user = document.getElementById("usernameLogo").innerText;
 document.getElementById("usernameLogo").innerText = changeUserLogo(user);
+
+// Show numbers of posts
+var numberOfPosts = document.getElementById("getNUmberOfPosts").innerText;
+// console.log(numberOfPosts);
+var showElement = document.getElementById("showNumberOfPosts");
+showElement.innerHTML = numberOfPosts;
+showElement.style.marginLeft = "30px";

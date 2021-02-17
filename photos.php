@@ -14,6 +14,14 @@ if(isset($_GET["img_id_delete"])){
     header('Location: photos.php');
 }
 
+if(isset($_GET["profile_set_img"])){
+    $img_name = $_GET["profile_set_img"];
+    $userId = $_SESSION["user"]->getUser_Id();
+
+    setImageAsProfilePhoto($userId, $img_name);
+    header('Location: photos.php');
+}
+
 
 ?>
 <h2>Photo Album</h2>
