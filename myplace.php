@@ -61,7 +61,7 @@ if(isset($_GET["filter"])){
 		$posts = getAllUserPosts($userId);
 		
 		//using function to display all posts with page		
-		displayPostsWithPagination($posts, $userId, 4, $filter);
+		myPlacePaginationPosts($posts, 4, $filter);
 
 		?>
 	</article>
@@ -128,7 +128,6 @@ if(isset($_GET["filter"])){
 </aside>
 
 <?php
-
 require_once $root."/includes/footer.php";
 ?>
 

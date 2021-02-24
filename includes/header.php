@@ -2,7 +2,7 @@
     $root =$_SERVER['DOCUMENT_ROOT'];
     require $root."/connection/config.php";
     require $root."/includes/functions.php";
-    require $root."/includes/model/User.class.php";
+    require $root."/includes/classes/User.class.php";
 
     session_start();
 ?>
@@ -60,6 +60,13 @@
                 echo "<div class=\"welcome\">Welcome to <span id=\"usernameLogo\">MyPlace</span></div>";
             }
         }
+
+        if(isset($_GET["search"])){
+            
+            $string = $_GET["search"];
+            header("Location: search.php?stringToSearch=$string");
+        }
+        
     ?> 
 </header>
 <?php require $root."/includes/navigation.php"; ?>

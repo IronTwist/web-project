@@ -1,9 +1,11 @@
 <footer>
     <div class="footerDiv">
-        text | text | text | text
+        <a href="home_place.php">Home</a> - 
+        <a href="myplace.php">MyPlace</a> - 
+        <a href="profile.php">Profile</a>  
     </div>
     <!-- <div><a href="#headerLogo">Back to the top</a></div>-->
-    <div>Under construction by Fratean Razvan</div> 
+    <div><small>&copy; Copyright 2021, MyPlace Social Blogging platform by Fratean Radu Razvan</small></div> 
 </footer>
 
     <script src="/css/bootstrap-4.5.3-dist/js/popper.min.js"></script>

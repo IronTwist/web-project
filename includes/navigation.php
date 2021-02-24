@@ -35,8 +35,8 @@
                 </li>
             <?php } ?>
         </ul>
-        <form target="search.php" method="get">
-            <input class="form-control" name="search" type="text" placeholder="Search" aria-label="Search">
+        <form action="../search.php" method="get" >
+            <input class="form-control" name="search" type="text" placeholder="Search" value="" aria-label="Search">
         </form>
     </div>
 </nav>

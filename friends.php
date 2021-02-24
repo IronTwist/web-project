@@ -9,7 +9,7 @@ require_once $root."../connection/config.php";
 
 
 if(isset($_GET["accept"]) && isset($_GET["userId"])){
-    $accept = filter_var($_GET["accept"], FILTER_VALIDATE_BOOL);
+    $accept = $_GET["accept"];
     $userIdFriend = filter_var($_GET["userId"], FILTER_VALIDATE_INT);
 
     if($accept == true){

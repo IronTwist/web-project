@@ -38,17 +38,28 @@ if(isset($_GET["filter"])){
                     if (!empty($friendsId)) {
                         foreach ($friendsId as $friendId) {
                             if ($user->getUser_id() != $friendId) {
-
-                                ?>
+                                $requestSent = checkIfRequestWasSent($_SESSION["user"]->getUser_id(), $user->getUser_id());
+                             
+                                if($requestSent == TRUE){
+                                    echo "Friend req sent";
+                                }else{
+                                    $requestReceive = checkIfRequestWasReceived($_SESSION["user"]->getUser_id(), $user->getUser_id());
+                                   
+                                    if ($requestReceive == true) {
+                                        echo "Friend req received";
+                                    } else {
+                                        ?>
                                 
                     <a class="sendFriendReqLink" href="includes/sendFriendRequest.php?userId=<?php echo $user->getUser_id(); ?>">Add Friend</a>
                        <?php
+                                    }
+                                }
                             }
                         }
                     }else{
                         ?>
                         <?php
-                              $requestSent = checkIfRequestWasSent($_SESSION["user"]->getUser_id(), $user->getUser_id());
+                             $requestSent = checkIfRequestWasSent($_SESSION["user"]->getUser_id(), $user->getUser_id());
                              
                              if($requestSent == TRUE){
                                  echo "Friend req sent";
@@ -64,7 +75,7 @@ if(isset($_GET["filter"])){
                         <a class="sendFriendReqLink" href="includes/sendFriendRequest.php?userId=<?php echo $user->getUser_id(); ?>">Add Friend</a>
                      <?php
                               }//end check if request was received
-                             }//end check if request was sent
+                        }//end check if request was sent
                     }
                     ?>   
                  </div>  
@@ -108,7 +119,7 @@ if(isset($_GET["filter"])){
 		$posts = getAllPosts();
 		
 		// using function to display all posts with page		
-		displayPostsWithPaginationHome($posts, 4, $filter);
+		homePaginationPosts($posts, 4, $filter);
 
 		?>
         <span id="getNUmberOfPosts" style="display: none;"><?php if(isset($_SESSION["totalNumberOfPosts"])){ echo $_SESSION["totalNumberOfPosts"]; } ?> articles</span>

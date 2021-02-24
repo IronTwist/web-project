@@ -26,7 +26,7 @@ body {
     width: auto;
     min-width: 240px;
     /* background-image: radial-gradient(rgb(137, 137, 243), rgb(137, 137, 243), black); */
-    background-image: linear-gradient(#0d4f70, #0E86D4, #0E86D4);
+    background-image: linear-gradient(#0d4f70, #0E86D4, #0d4f70);
     background-size: 100%;
     border-top-left-radius: 5em;
     border-top-right-radius: 5em;
@@ -215,8 +215,150 @@ section {
     border-radius: 0em;
 } 
 
+.btnEdit {
+    width: 40px;
+    text-align: center;
+    font-size: 14px;
+    float: right;
+    margin-top: -30px;
+    margin-right: 40px;
+    text-decoration: none;
+    padding: 4px;
+    color: black;
+    background-image: linear-gradient(to bottom, rgb(248, 248, 252), rgb(255, 0, 0));
+    box-shadow: 0px 0px 1px 1px black;
+    border-radius: 1em;
+    animation: normal;
+    transition: 0.5s;
+} 
+
+.btnEdit:hover { 
+    width: 40px;
+    text-align: center;
+    color: black;
+    text-decoration: none;
+    /* border: 1px solid black; */
+    background-image: linear-gradient(to bottom, rgb(247, 247, 242), blue);
+    border-radius: 0em;
+} 
+
+.btnEdit:visited { color: black; }
+
+.comment{
+    border: 1px solid white;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-shadow: 1px 1px 6px 2px black;
+}
+
+.commentUsername{
+    color:white;
+    text-shadow: 2px 2px 3px black;
+}
+
+.commentDatetime{
+    color: white;
+    float: right;
+    margin-right: 10px;
+}
+
+.commentContent{
+    background-color: antiquewhite;
+    border-radius: 0.5em;
+    margin-top: 10px;
+    padding: 5px;
+    word-wrap: normal;
+    text-align: justify;
+}
+
+.commentContentDiv{
+    width: 100%;
+    padding:20px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 0px 4px 1px black;
+    margin-bottom: 20px;
+    border-radius: 0.5em;
+}
+
+.commentAddContent{
+    width: 100%;
+    height: 30px;
+    resize: none;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 0px 4px 1px black;
+    animation: normal;
+    transition: 0.5s;
+}
+
+.commentAddContent:focus{
+    width: 100%;
+    resize: none;
+    height: 130px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 20px solid white;
+    box-shadow: 0px 0px 4px 2px black;
+}
+
+.commentAddBtn{
+    color: white;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 4px;
+    color: black;
+    background-image: linear-gradient(rgb(137, 137, 243), rgb(137, 137, 243), rgb(120, 187, 250));
+    box-shadow: 0px 0px 1px 1px black;
+    border-radius: 0.2em;
+    margin-top: 10px;
+}
+
+.commentAddBtn:hover{
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 4px;
+    color: black;
+    background-image: linear-gradient(rgb(137, 137, 243), rgb(137, 137, 243), rgb(21, 17, 255));
+    box-shadow: 0px 0px 1px 1px black;
+    border-radius: 0.2em;
+    margin-top: 10px;
+}
+
+.btnDeleteComment{
+    width: 30px;
+    text-align: center;
+    font-size: 14px;
+    float: right;
+    text-decoration: none;
+    padding: 4px;
+    color: black;
+    background-image: linear-gradient(to bottom, rgb(248, 248, 252), rgb(255, 0, 0));
+    box-shadow: 0px 0px 1px 1px black;
+    border-radius: 1em;
+    animation: normal;
+    transition: 0.5s;
+}
+
+.btnDeleteComment:hover { 
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    color: black;
+    text-decoration: none;
+    background-image: linear-gradient(to bottom, rgb(247, 247, 242), blue);
+    border-radius: 0em;
+} 
+
 h3{
     text-align: justify;
+    /* text-shadow: 2px 5px 4px black; */
 }
 
  .showContent {
@@ -233,21 +375,36 @@ footer {
     color: white;
     text-align: center;
     width: 100%;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     clear: left;
     background-color: #4771AC;
     border-radius: 0.7em;
+    padding: 5px;
+    box-shadow: 2px 2px 4px 1px black;
+    margin-bottom: 10px;
 }
 
 .footerDiv{
-    text-align: center;
+    text-align: right;
     color:black;
     border-radius: 0.7em;
     width: 100%;
-    height: 100px;
+    height: 30px;
     /* background-color: blue; */
     background-image: linear-gradient(#bbbbbb,#d6d6d6,#4771AC);
-    padding-top: 30px;
+    
+}
+
+.footerDiv a{
+    text-decoration: none;
+    color:black;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 5px black;
+    margin-right: 10px;
+}
+.footerDiv a:hover{
+    color: yellow;
+    text-decoration: none;
 }
 
 .photosPage{
@@ -371,6 +528,8 @@ h2 {
 @media only screen and (min-width: 600px) {
     /* For tablets: */
     
+    
+
     section {
         width: 100%;
         
@@ -379,6 +538,10 @@ h2 {
     aside {
         width: 100%;
         
+    }
+
+    .commentContentDiv{
+        width: 100%;
     }
 }
 
@@ -400,6 +563,16 @@ h2 {
 
     .navLogo{
         display: none;
+    }
+
+    .commentContentDiv{
+        width: 60%;
+        padding:20px;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0px 0px 4px 1px black;
+        margin-bottom: 20px;
+        border-radius: 0.5em;
     }
 }
 

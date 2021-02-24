@@ -1,16 +1,15 @@
 <?php
+session_start();
+if(!isset($_SESSION["user"])){
+    header("Location: ../../../login.php");
+}
+
 require_once $_SERVER['DOCUMENT_ROOT']."/connection/config.php";
 require_once $_SERVER['DOCUMENT_ROOT']."/includes/functions.php";
-require_once $_SERVER['DOCUMENT_ROOT']."/includes/model/User.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/includes/classes/User.class.php";
 
-session_start();
 
-// if (isset($_GET["error"])) {
-//     $error = $_GET["error"];
-//     if ($error == 1) {
-//         echo "<p>Eroare la logare</p>";
-//     }
-// }
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -55,20 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 }
 
-if (isset($_SESSION)) {
-    echo "<pre>";
-    print_r($_SESSION);
-    echo "</pre>";
-}
 
 $connection->close();
 
 ?>
-
-<script type="text/javascript">
-//     console.log(getQueryVariable('error'));
-   
-//     if(getQueryVariable("error") == 1){
-//         alert();
-//     }
-// </script>

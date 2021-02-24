@@ -1,5 +1,15 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT']."/connection/config.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/includes/classes/Pagination.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/includes/classes/Comment.class.php";
+
+function filterInput($data)
+  {
+    $data=trim($data);
+    $data=stripslashes($data);
+    $data=htmlspecialchars($data);
+    return $data;
+}
 
 function getAllCategories(){
     global $connection;
@@ -55,6 +65,22 @@ function getAllPosts(){
     return $posts;
 }
 
+function getPost($id){
+    global  $connection;
+    $post = [];
+
+    $sql = "SELECT * FROM posts WHERE id=$id";
+    $result = $connection->query($sql);
+
+    if($result->num_rows > 0){
+        while($row = $result->fetch_assoc()){
+            array_push($post, $row);
+        }
+    }
+    
+    return $post;
+}
+
 
 function getAllUserPosts($user_id){
   global  $connection;
@@ -96,181 +122,39 @@ function categoryFilter($data, $categoryFilter){
     return $array;
 }
 
-function displayPostsWithPagination($data, $user_id, $elPerPage, $categoryFilter){
+function myPlacePaginationPosts($data, $elPerPage, $categoryFilter){
 
-    if(isset($categoryFilter) && $categoryFilter != ""){
-        $data = categoryFilter($data, $categoryFilter);
-    }
-
-    if(!isset($_GET["page"])){
-        $_GET["page"] = 1;
-    }
-    
-    $numarElemente = count($data);
-    $_SESSION["totalNumberOfPosts"] = $numarElemente;
-    $pagini = 0;
-    $elementPerPage = $elPerPage;
-    $currentPage = $_GET["page"];  //pag 1
-    $nextPage = 0;
-
-    $pagini = numaraPagini($numarElemente, $elementPerPage);
-
-    if(isset($_GET["page"])){
-        $nextPage = $_GET["page"] + 1;
-    }
-
-    if(isset($_GET["page"])){
-        $previousPage = $_GET["page"] - 1;
-    }
-
-    for($p = 1; $p <= $pagini; $p++){
-         
-        if($currentPage == $p){    
-            
-            $startAfisare = ($p-1) * $elementPerPage; 
-            $endAfisare =$startAfisare + $elementPerPage; 
-           
-            while($startAfisare < $endAfisare){
-
-                if(isset($data[$startAfisare])){
-                   
-                    $post = $data[$startAfisare];
-                    $postDateTime = $post["data"];
-
-                    echo "<div class=\"postDisplay\">";
-                    echo "<h3>"."&emsp;".$post["title"]."</h3>";
-                    echo "<hr>";
-                    
-                    echo '<p class="showContent">'.$post['content'].'</p>';
-                    echo "<hr>";
-                    echo "Data: ".getHowMuchTimePassed($postDateTime)."</br>";
-                    // echo "</br>";
-                    echo "<hr>";
-                    
-                    echo "<div>User: ".$_SESSION["user"]->getUserName()."</div>";
-                    echo "<div>Category: ".$post["category"]."</div>";
-                    echo "<a onclick=\"return confirm('Are you sure you want to delete this post?')\" 
-                    href=\"myplace.php?clickDelete=".$post["id"]."\" id=\"btnDelete\" 
-                    class=\"btnDelete\">&#x2715</a>";
-
-                    echo "</div>";
-                    
-                }
-
-                $startAfisare += 1;
-            }
-        }
-    }
-
-    echo "</br>";
-    if ($currentPage == $pagini) {
-        echo "<a href=\"home_place.php?filter=".$categoryFilter."&page=".$pagini-($pagini-1)."\">firstPage</a>  |  ";
-    }
-
-    if($currentPage > 1){
-        echo "<a href=\"myplace.php?filter=".$categoryFilter."&page=".$previousPage."\">previousPage</a>"; 
-        echo " | ";
-    }
-        
-    if($currentPage < $pagini){
-        echo "<a href=\"myplace.php?filter=".$categoryFilter."&page=".$nextPage."\">nextPage</a>";
-    }
-    if ($currentPage != $pagini) {
-        echo " | <a href=\"myplace.php?filter=".$categoryFilter."&page=".$pagini."\">lastpage</a>";
-    }
-
+    $myPlacePagination = new Pagination;
+    $myPlacePagination->displayPostsWithPagination($data, $elPerPage, $categoryFilter);
+    // unset($myPlacePagination);
 }
 
-function displayPostsWithPaginationHome($data, $elPerPage, $categoryFilter){
-    if(isset($categoryFilter) && $categoryFilter != ""){
-        $data = categoryFilter($data, $categoryFilter);
-    }
+function homePaginationPosts($data, $elPerPage, $categoryFilter){
 
-    if(!isset($_GET["page"])){
-        $_GET["page"] = 1;
-    }
-    
-    $numarElemente = count($data);
-    $_SESSION["totalNumberOfPosts"] = $numarElemente;
-    $pagini = 0;
-    $elementPerPage = $elPerPage;
-    $currentPage = $_GET["page"];  //pag 1
-    $nextPage = 0;
-
-    $pagini = numaraPagini($numarElemente, $elementPerPage);
-
-    if(isset($_GET["page"])){
-        $nextPage = $_GET["page"] + 1;
-    }
-
-    if(isset($_GET["page"])){
-        $previousPage = $_GET["page"] - 1;
-    }
-
-    for($p = 1; $p <= $pagini; $p++){
-         
-        if($currentPage == $p){    
-            
-            $startAfisare = ($p-1) * $elementPerPage; 
-            $endAfisare =$startAfisare + $elementPerPage; 
-           
-            while($startAfisare < $endAfisare){
-
-                if(isset($data[$startAfisare])){
-                   
-                    $post = $data[$startAfisare];
-                    $postDateTime = $post["data"];
-
-                    echo "<div class=\"postDisplay\">";
-                    echo "<h3>"."&emsp;".$post["title"]."</h3>";
-                    echo "<hr>";
-                    
-                    echo '<p class="showContent">'.$post['content'].'</p>';
-                    echo "<hr>";
-                    echo "Data: ".getHowMuchTimePassed($postDateTime)."</br>";
-                    // echo "</br>";
-                    echo "<hr>";
-                    
-                    echo "<div>Post by ".getUserData($post["id_user"],"username")."</div>";
-                    echo "<div>Category: ".$post["category"]."</div>";
-                   
-                    echo "</div>";
-                    
-                }
-
-                $startAfisare += 1;
-            }
-        }
-    }
-    echo "</br>";
-        ?>
-        <div style="width: 100%; text-align: center;"><?php echo $currentPage." / ".$pagini ?></div>
-        <?php
-    echo "</br>";
-    echo "<div class=\"paginationNavBar\">";
-    if ($currentPage == $pagini && $elementPerPage < $numarElemente) {
-        echo "<a href=\"home_place.php?filter=".$categoryFilter."&page=".$pagini-($pagini-1)."\">first-Page</a>  |  ";
-    }
-
-    if($currentPage > 1){
-        echo "<a href=\"home_place.php?filter=".$categoryFilter."&page=".$previousPage."\">previous-Page</a>"; 
-        echo " | ";
-    }
-        
-    if($currentPage < $pagini){
-        echo "<a href=\"home_place.php?filter=".$categoryFilter."&page=".$nextPage."\">next-Page</a>";
-    }
-
-    if ($currentPage != $pagini) {
-        echo " | <a href=\"home_place.php?filter=".$categoryFilter."&page=".$pagini."\">last-page</a>";
-    }
-    echo "</div>";
-    
+    $homePagination = new Pagination;
+    $homePagination->displayPostsWithPaginationHome($data, $elPerPage, $categoryFilter);
+    // unset($homePagination);
 }
 
+function searchPaginationPosts($data, $elPerPage, $categoryFilter, $stringSearch ){
+
+    $searchPagination = new Pagination;
+    $searchPagination->searchPostsWithPagination($data, $elPerPage, $categoryFilter, $stringSearch);
+}
 
 function addPost($id_user, $title, $content, $publishedType, $category, $connection){
     $sql = "INSERT INTO posts(id_user, title, content, published_type, category) VALUES ('".$id_user."','".$title."','".$content."','".$publishedType."','".$category."')";
+    
+    if($connection->query($sql) === TRUE){
+        return TRUE;
+    }else{
+        return FALSE;
+    }
+}
+
+function updatePost($id_post, $title, $content, $publishedType, $category, $connection){
+    
+    $sql = "UPDATE posts SET title='$title', content='$content', published_type='$publishedType', category='$category' WHERE id='$id_post'"; 
     echo $sql;
     if($connection->query($sql) === TRUE){
         return TRUE;
@@ -369,7 +253,7 @@ function currentYearString(){
                 $lunaCurrent = $splitCurrent[5].$splitCurrent[6];
                 $ziuaCurrent = $splitCurrent[8].$splitCurrent[9];
                 $oraCurrent = $splitCurrent[11].$splitCurrent[12]; 
-                $oraCurrent = $oraCurrent + 1;//+ 1 ora
+                $oraCurrent = $oraCurrent + 1;//+ 1 hour
                 $minCurrent = $splitCurrent[14].$splitCurrent[15];
                 $secCurrent = $splitCurrent[17].$splitCurrent[18];
 
@@ -387,7 +271,20 @@ function getHowMuchTimePassed($postDateTime){
 
     $dteDiff  = $dteStart->diff($dteEnd); 
 
-    return $dteDiff->format("%YY %Ml %Dz - %HH %Im %Ss");
+    return $dteDiff->format("%y Year -%m Month -%d Days -%H Hours -%I Minutes -%S Seconds");
+}
+
+function displayWithoutZeroDates($dateString){
+    $dataExplode = explode("-", $dateString);
+    $collect = [];
+    
+    for($i = 0; $i < count($dataExplode); $i++){
+        if(!str_starts_with($dataExplode[$i], "0")){
+            array_push($collect, $dataExplode[$i]);
+        }
+    }
+   
+    return implode("",$collect);
 }
 
 function makeDirForUpload($user){
@@ -455,7 +352,6 @@ function deleteUploadedImage($image_id, $user_name, $img_name){
         header("Location: photos.php");
     }
 }
-
 
 
 function removeEmptySubFolders($path)
@@ -539,7 +435,7 @@ function userProfilePic($user_id, $userName){
     if($result->num_rows > 0){
         $row = $result->fetch_assoc();
         $pictureName = replaceSpaceWithBackslash($row["picture"]);
-        return "url(uploads/".$userName."/".$pictureName.")";
+        return "url(uploads/".$userName."/prew_".$pictureName.")";
     }
 
     return "";
@@ -748,5 +644,37 @@ function getUserData($id_user, $flag){
 
     return "";
 }
+
+function searchPosts($string){
+    global $connection;
+    $string = filterInput($string);
+    $searchWords = explode(" ", $string);
+
+    $posts = [];
+    for($i=0; $i < count($searchWords); $i++){
+        $word = $searchWords[$i];
+
+        $sql = "SELECT * FROM `view_posts` WHERE `title` LIKE '%$word%' OR
+                                                `content` LIKE '%$word%' OR 
+                                                `category` LIKE '%$word%'";
+
+        $res = $connection->query($sql);
+
+        if($res->num_rows > 0){
+            while($row = $res->fetch_assoc()){
+                array_push($posts, $row);
+            }
+        }
+    }
+    //to remove my unique values
+    $posts = array_unique($posts, SORT_REGULAR);
+    
+    return $posts;
+}
+
+
+// function getUsernameById($id){
+// LECT"
+// }
 
 ?>
