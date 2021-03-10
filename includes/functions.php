@@ -98,6 +98,29 @@ function getAllUserPosts($user_id){
   return $posts;
 }
 
+function getAllPublicPosts(){
+    global $connection;
+    $posts = [];
+
+    $sql = "SELECT view_posts.id, view_posts.title, view_posts.content, view_posts.published_type, view_posts.category, view_posts.data, users.userName
+    FROM
+        view_posts
+    INNER JOIN users
+    ON view_posts.id_user = users.id
+    WHERE
+        published_type = 'public'";
+    
+    $result = $connection->query($sql);
+
+    if($result->num_rows > 0){
+        while($row = $result->fetch_assoc()){
+            array_push($posts, $row);
+        }
+    }
+    $posts = array_reverse($posts);
+    return $posts;
+}
+
 function numaraPagini($numarElemente, $elPerPage){
     $countPagini = 0;
     for($i = 0; $i < $numarElemente; $i++){
@@ -122,18 +145,21 @@ function categoryFilter($data, $categoryFilter){
     return $array;
 }
 
+function loginPaginationPosts($data, $elPerPage){
+    $publicPostsPaginatin = new Pagination;
+    $publicPostsPaginatin->displayPublicPostsWithPagination($data, $elPerPage);
+}
+
 function myPlacePaginationPosts($data, $elPerPage, $categoryFilter){
 
     $myPlacePagination = new Pagination;
     $myPlacePagination->displayPostsWithPagination($data, $elPerPage, $categoryFilter);
-    // unset($myPlacePagination);
 }
 
 function homePaginationPosts($data, $elPerPage, $categoryFilter){
 
     $homePagination = new Pagination;
-    $homePagination->displayPostsWithPaginationHome($data, $elPerPage, $categoryFilter);
-    // unset($homePagination);
+    $homePagination->displayPostsWithPaginationHome($data, $elPerPage, $categoryFilter); 
 }
 
 function searchPaginationPosts($data, $elPerPage, $categoryFilter, $stringSearch ){
@@ -155,7 +181,7 @@ function addPost($id_user, $title, $content, $publishedType, $category, $connect
 function updatePost($id_post, $title, $content, $publishedType, $category, $connection){
     
     $sql = "UPDATE posts SET title='$title', content='$content', published_type='$publishedType', category='$category' WHERE id='$id_post'"; 
-    echo $sql;
+    
     if($connection->query($sql) === TRUE){
         return TRUE;
     }else{
@@ -271,7 +297,7 @@ function getHowMuchTimePassed($postDateTime){
 
     $dteDiff  = $dteStart->diff($dteEnd); 
 
-    return $dteDiff->format("%y Year -%m Month -%d Days -%H Hours -%I Minutes -%S Seconds");
+    return $dteDiff->format("%y Year -%m Month -%d Days -%h Hours -%i Minutes -%s Seconds");
 }
 
 function displayWithoutZeroDates($dateString){
@@ -279,12 +305,19 @@ function displayWithoutZeroDates($dateString){
     $collect = [];
     
     for($i = 0; $i < count($dataExplode); $i++){
-        if(!str_starts_with($dataExplode[$i], "0")){
+        if(!strStartsWith($dataExplode[$i], "0")){
             array_push($collect, $dataExplode[$i]);
         }
     }
    
     return implode("",$collect);
+}
+
+function strStartsWith($string, $flag){
+	if($string[0] == $flag){
+		return true;	
+	}
+	return false;
 }
 
 function makeDirForUpload($user){
@@ -673,8 +706,6 @@ function searchPosts($string){
 }
 
 
-// function getUsernameById($id){
-// LECT"
-// }
+
 
 ?>

@@ -75,6 +75,18 @@ section {
     transition: 1s;
 }
 
+.textareaNoteEdit {
+    font-family: 'Philosopher', sans-serif;
+    width: 100%;
+    border-radius: 1em;
+    border: 0px;
+    height: 350px;
+    margin-left: 0px;
+    padding-left: 15px;
+    resize: none;
+    transition: 1s;
+}
+
 .textareaNote:focus {
     height: 150px;
     font-family: 'Philosopher', sans-serif; 
@@ -112,6 +124,7 @@ section {
 }
 
 .addFormBtn {
+    color: black;
     width: 100px;
     font-weight: bold;
     color: black;
@@ -152,7 +165,7 @@ section {
     background-image: radial-gradient( rgb(184, 184, 235), #003060);
     margin-top: 20px;
     margin-left: auto;
-    margin-right: auto; 
+    margin-right: auto;
     padding: 20px;
     padding-top: 30px;
     border-radius: 3em;
@@ -177,6 +190,12 @@ section {
     box-shadow: 1px 2px 4px 0px black; 
 }
 
+.publicArticles{
+    border: 1px solid white;
+    height: 200px;
+    width: auto;
+}
+
 .postDisplay {
     color: black;
     width: auto;
@@ -190,6 +209,17 @@ section {
     box-shadow: 2px 2px 2px 2px black;
 } 
 
+.titlePost{
+    font-weight: bold;
+    color: #003060;
+}
+
+.titlePost:visited{
+    color: #003060;
+    ;
+    
+}
+
 .btnDelete {
     width: 30px;
     text-align: center;
@@ -200,7 +230,8 @@ section {
     padding: 4px;
     color: black;
     background-image: linear-gradient(to bottom, rgb(248, 248, 252), rgb(255, 0, 0));
-    box-shadow: 0px 0px 1px 1px black;
+    box-shadow: 1px 1px 3px 0.5px black;
+    /* border: 1px solid black; */
     border-radius: 1em;
     animation: normal;
     transition: 0.5s;
@@ -210,9 +241,10 @@ section {
     width: 30px;
     text-align: center;
     color: white;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     background-image: linear-gradient(to bottom, rgb(247, 247, 242), blue);
     border-radius: 0em;
+    text-decoration: none;
 } 
 
 .btnEdit {
@@ -226,19 +258,20 @@ section {
     padding: 4px;
     color: black;
     background-image: linear-gradient(to bottom, rgb(248, 248, 252), rgb(255, 0, 0));
-    box-shadow: 0px 0px 1px 1px black;
+    box-shadow: 1px 1px 3px 0.5px black;
     border-radius: 1em;
     animation: normal;
     transition: 0.5s;
 } 
 
 .btnEdit:hover { 
+    color: rgb(175, 161, 161);
     width: 40px;
     text-align: center;
     color: black;
     text-decoration: none;
-    /* border: 1px solid black; */
     background-image: linear-gradient(to bottom, rgb(247, 247, 242), blue);
+    box-shadow: 1px 1px 3px 0.5px black;
     border-radius: 0em;
 } 
 
@@ -574,6 +607,7 @@ h2 {
         margin-bottom: 20px;
         border-radius: 0.5em;
     }
+
 }
 
 

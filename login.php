@@ -14,13 +14,26 @@ if(isset($_SESSION["user"])){
 		}
 
 		if($_GET["message"] == 2){
-			echo "<p>Logare esuata!</p>";
+			echo "<p>Error, try again!</p>";
 		}
 	}else{
 		echo "";
 	}	
 	?>
 </div>
+<section>
+	<article style="color: white;">
+		<?php
+
+		//Fetching all public posts
+		$posts = getAllPublicPosts();
+		
+		//using function to display all posts with page		
+		loginPaginationPosts($posts, 4);
+
+		?>
+	</article>	
+</section>
 
 <div class="login">
 	<form action="includes/login_check.php" method="post">
@@ -34,7 +47,8 @@ if(isset($_SESSION["user"])){
 	<br>
 	<a href="register.php">Create account</a>
 </div>
-</br>	
+</br>
+
 <?php
 require $_SERVER['DOCUMENT_ROOT']."/includes/footer.php";
 ?>

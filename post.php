@@ -66,25 +66,10 @@ if(isset($_GET["viewPost"])){
     $comments = array_reverse($comments);
     
     echo "<h4>Comments (".count($comments).") </h4></br>";
-    foreach($comments as $comment){ ?>
-      
-      <div class="comment">
-            <span class="commentUsername"><?php echo getUserData($comment->getUserId(), "username"); ?></span>
-            
-        <?php if($sessionUserName == getUserData($comment->getUserId(), "username")){ ?>
-            <span><a class="btnDeleteComment" href="post.php?postIdComment=<?php echo $post[0]["id"]; ?>&deleteComment=<?php echo $comment->getId(); ?>">&#x2715</a></span> 
-        <?php }  ?>  
-            <span class="commentDatetime"><?php echo $comment->getDatetime();?></span>
-            
-            <p class="commentContent"><?php echo $comment->getComment(); ?></p>
-              
-      </div>
-        
     
-    <?php
-    }
     ?>
-    
+    <div id="comment"></div>
+    <div id="loadCommentsButton"></div>
     <?php
 
 } //END FOR VIEW POST
@@ -98,7 +83,7 @@ if (!empty($postById)) {
 		<h1>Edit post</h1>
 	<form action="/includes/post.php" method="post">
 		<input class="titleField" type="text" name="title" value="<?php echo $postById[0]["title"]; ?>" placeholder="Title here" required>
-		<textarea class="textareaNote" name="postContent" wrap="soft|hard" placeholder="Content here" required><?php echo $postById[0]["content"]; ?>
+		<textarea class="textareaNoteEdit" name="postContent" wrap="soft|hard" placeholder="Content here" required><?php echo $postById[0]["content"]; ?>
         </textarea>
 		<input type="hidden" id="post_id" name="post_id" value="<?php echo $postById[0]["id"]; ?>" >
 		
@@ -142,19 +127,104 @@ if (!empty($postById)) {
 </aside>
 
 <?php
-    } else {
-        //
-        echo "This post it's not your's!";
+        } else {
+            //
+            echo "This post it's not your's!";
+        }
+    }else{
+        //If no post selected - END OF EDIT POST
+        // header("Location: myplace.php");
     }
-}else{
-    //If no post selected - END OF EDIT POST
-    // header("Location: myplace.php");
-}
 
 }else{
     //If user is not loged in do
     header("Location: login.php");
 }
-
+?>
+<?php
 require_once $root."/includes/footer.php";
 ?>
+<script>
+var queryString = window.location.search;
+var urlParams = new URLSearchParams(queryString);
+var postId = urlParams.get('viewPost');
+var logedUserId = "<?php echo $_SESSION["user"]->getUser_id(); ?>";
+var countComments = <?php echo count($comments); ?>;
+
+window.onload = loadComments(postId);
+var arrayColectat = [];
+
+function loadComments(id){
+    let comments = [];
+
+    var request=new XMLHttpRequest();
+    request.onreadystatechange=function() {
+        if (request.readyState == 4)
+            if (request.status == 200){
+
+                var arr = JSON.parse(request.response);
+                let numberOfObjects = arr.length;
+                
+                if(numberOfObjects > 0){
+                    var i = 0;
+                    while(i < arr.length){
+                        comments.push(arr[i]);
+                        i++;
+                    }
+                    arrayColectat = comments.reverse();
+                    
+                    document.getElementById("comment").innerHTML += showMessage(arr, arr.length - 1);
+                    document.getElementById("comment").innerHTML += showMessage(arr, arr.length - 2);
+                    document.getElementById("comment").innerHTML += showMessage(arr, arr.length - 3);
+                    document.getElementById("comment").innerHTML += showMessage(arr, arr.length - 4);
+  
+                }else{
+                    document.getElementById("loadCommentsButton").style.display = "none";
+                }
+            }
+    }
+
+    request.open("GET","/includes/loadComments.php?postId="+id,true);
+    request.send("");
+
+}
+    
+var start = 4;
+var end = 8;
+
+function loadMore(data){
+    
+    while(start < end){
+        
+        if(data[start] != undefined){
+            document.getElementById("comment").innerHTML += showMessage(data, start);       
+        }
+        start++;
+    }
+    
+    end  += 4;
+}  
+ 
+function showMessage(objectComment, index){
+    
+    var returnShow = "<div class=\"comment\">";
+    returnShow += "<span class=\"commentUsername\">"+objectComment[index].userName+"</span>";
+    returnShow += "<span class=\"commentDatetime\">"+objectComment[index].datetime+"</span>";
+    returnShow += "<p class=\"commentContent\">"+objectComment[index].comment+"</p>";
+    if(objectComment[index].user_id == logedUserId){
+        returnShow += "<p><a onclick=\"return confirm('Are you sure you want to delete the message?')\" class=\"btnDelete\" href=\"post.php?postIdComment="+objectComment[index].post_id+"&deleteComment="+objectComment[index].id+"\">✕</a></p>";
+    }
+    returnShow += "</div>";
+  
+    return returnShow;
+}
+
+
+let btn = document.getElementById("loadCommentsButton");
+btn.innerHTML = "<div style=\"text-align: center; margin-bottom: 10px;\"><button style=\"width: 300px;\" class=\"commentAddBtn\" onclick=\"loadMore(arrayColectat)\">Load more comments</button></div>";
+
+</script>
+
+
+
+

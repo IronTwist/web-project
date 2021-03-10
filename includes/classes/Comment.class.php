@@ -32,8 +32,8 @@ class Comment{
 
     function addComment(){
         global $connection;
-    
-        $sql = "INSERT INTO comments(post_id, user_id, comment) VALUES('$this->postId', '$this->userId', '$this->comment')";
+        $comment = addslashes($this->comment);
+        $sql = "INSERT INTO comments(post_id, user_id, comment) VALUES('$this->postId', '$this->userId', '$comment')";
         
         $result = $connection->query($sql);
     

@@ -41,12 +41,9 @@
                 selCategory.appendChild(option); 
                 category.value = "";
                 document.getElementById('category').value = value;
-            }
+            }   
+        }  
 
-            
-        }
-
-       
     </script>
     <script type="text/javascript" src="/javascript/functions.js"></script>
 </body>
