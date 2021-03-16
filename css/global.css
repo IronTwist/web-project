@@ -6,14 +6,13 @@
 @import "aside.css";
 @import "home.css";
 @import "friends.css";
+@import "profile.css";
 
 html {
     background-image: radial-gradient(rgb(204, 253, 27), #C3E0E5, #C3E0E5,  #274472);
     padding-top: 30px;
     margin-left: 5px;
     margin-right: 5px;
-    /* background-image: url(../img/green-garden-seamless-pattern-vector.jpg); */
-    /* background-size: 400px; */
 }
 
 h1, h4{
@@ -445,12 +444,14 @@ footer {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: auto;
     padding: 10px;
     margin-left: auto;
     margin-right: 0;
-    background-color: rgba(230, 231, 230, 0.685);
+    background-color: bisque;
     margin-top: 30px;
     margin-bottom: 30px;
 }

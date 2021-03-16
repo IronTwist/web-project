@@ -150,6 +150,7 @@ var urlParams = new URLSearchParams(queryString);
 var postId = urlParams.get('viewPost');
 var logedUserId = "<?php echo $_SESSION["user"]->getUser_id(); ?>";
 var countComments = <?php echo count($comments); ?>;
+var commentsDisplayed = 0;
 
 window.onload = loadComments(postId);
 var arrayColectat = [];
@@ -203,6 +204,13 @@ function loadMore(data){
     }
     
     end  += 4;
+
+    const foo = document.getElementById('comment');
+    commentsDisplayed = foo.children.length;
+
+    if(commentsDisplayed == countComments){
+        let btn = document.getElementById("loadCommentsButton").style.display = "none";
+    }
 }  
  
 function showMessage(objectComment, index){
@@ -219,6 +227,9 @@ function showMessage(objectComment, index){
     return returnShow;
 }
 
+if(countComments < 4){
+        let btn = document.getElementById("loadCommentsButton").style.display = "none";
+}
 
 let btn = document.getElementById("loadCommentsButton");
 btn.innerHTML = "<div style=\"text-align: center; margin-bottom: 10px;\"><button style=\"width: 300px;\" class=\"commentAddBtn\" onclick=\"loadMore(arrayColectat)\">Load more comments</button></div>";

@@ -5,7 +5,7 @@
         <a href="profile.php">Profile</a>  
     </div>
     <!-- <div><a href="#headerLogo">Back to the top</a></div>-->
-    <div><small>&copy; Copyright 2021, MyPlace Social Blogging platform by Fratean Radu Razvan</small></div> 
+    <div class="friendReqSentReceived"><small>&copy; Copyright 2021, MyPlace Social Blogging platform by Fratean Radu Razvan</small></div> 
 </footer>
 
     <script src="/css/bootstrap-4.5.3-dist/js/popper.min.js"></script>
@@ -42,8 +42,8 @@
                 category.value = "";
                 document.getElementById('category').value = value;
             }   
-        }  
-
+        }
+        
     </script>
     <script type="text/javascript" src="/javascript/functions.js"></script>
 </body>

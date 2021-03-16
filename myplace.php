@@ -87,7 +87,7 @@ if(isset($_GET["filter"])){
                         if ($user->getUser_id() == $friendId) { //show if is a friend
                    ?>
                     <div class="showUserFriendOnMyPlace" style="background-image: <?php echo userProfilePic($user->getUser_id(), $user->getUserName()); ?>;">
-                    <div><?php echo $user->getUserName(); ?></div></br>
+                    <div class="usernameStyleDisplay"><a href="profile.php?userId=<?php echo $user->getUser_id(); ?>"><?php echo ucfirst($user->getUserName()); ?></a></div></br>
                        
                     </div>  
                  <?php

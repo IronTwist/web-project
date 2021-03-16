@@ -81,7 +81,7 @@ if(isset($_GET["removeUserId"])){
                         if ($user->getUser_id() == $friendId) { //show if is a friend
                    ?>
                     <div class="showUserFriend" style="background-image: <?php echo userProfilePic($user->getUser_id(), $user->getUserName()); ?>;">
-                    <div><?php echo $user->getUserName(); ?></div></br>
+                    <div class="usernameStyleDisplay"><a href="profile.php?userId=<?php echo $user->getUser_id(); ?>"><?php echo ucfirst($user->getUserName()); ?></a></div></br>
                     
                     <a class="removeFriend" href="friends.php?removeUserId=<?php echo $user->getUser_id(); ?>">Remove Friend</a>
                         

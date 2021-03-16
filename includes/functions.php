@@ -236,39 +236,6 @@ function delete_message($connection, $id){
     }
 }
 
-//Function to calculate time
-// function dateTimeDiferenceFunction($postDateTime){
-//     $split = str_split($postDateTime);
-
-//                 $anul = $split[0].$split[1].$split[2].$split[3];
-//                 $luna = $split[5].$split[6];
-//                 $ziua = $split[8].$split[9];
-//                 $ora = $split[11].$split[12];
-//                 $min = $split[14].$split[15];
-//                 $sec = $split[17].$split[18];
-
-//                 // print_r($split);
-
-//                 echo $anul." ".$luna." ".$ziua." ".$ora." ".$min." ".$sec;
-
-//                 echo "</br>";
-//                 $nowDateTime =new DateTime("now");
-//                 $currentDateTime = $nowDateTime->format('Y-m-d H:i:s');
-
-//                 $splitCurrent = str_split($currentDateTime);
-
-//                 $anulCurrent = $splitCurrent[0].$splitCurrent[1].$splitCurrent[2].$splitCurrent[3];
-//                 $lunaCurrent = $splitCurrent[5].$splitCurrent[6];
-//                 $ziuaCurrent = $splitCurrent[8].$splitCurrent[9];
-//                 $oraCurrent = $splitCurrent[11].$splitCurrent[12]; //+ 1 ora
-//                 $minCurrent = $splitCurrent[14].$splitCurrent[15];
-//                 $secCurrent = $splitCurrent[17].$splitCurrent[18];
-
-//                 // print_r($currentDateTime);
-
-//                 echo $anulCurrent." ".$lunaCurrent." ".$ziuaCurrent." ".$oraCurrent." ".$minCurrent." ".$secCurrent;
-// }
-
 function currentYearString(){
     $nowDateTime =new DateTime("now");
                 $currentDateTime = $nowDateTime->format('Y-m-d H:i:s');
@@ -447,6 +414,33 @@ function getAllUsers(){
     }
 
     return $users;
+}
+
+function getUser($id){
+    global $connection;
+    $user = null;
+
+    $sql = "SELECT * FROM users WHERE id=$id";
+
+    $result = $connection->query($sql);
+
+    if($result->num_rows > 0){
+        while($row = $result->fetch_assoc()){
+            $user = new User(
+                $row["id"],
+                $row["userName"], $row["password"], $row["email"], $row["first_name"], $row["last_name"], $row["sex"],
+                $row["registerDate"], $row["userRole"], $row["birthday"], $row["country"], $row["city"], $row["about"]
+            );     
+        }
+    }
+
+    return $user; 
+}
+
+function getUserProfile($id){
+    $user = getUser($id);
+    $user->setPassword(null);
+    return $user;
 }
 
 function createUserProfilePic($user_id){
@@ -705,7 +699,107 @@ function searchPosts($string){
     return $posts;
 }
 
+function showProfile($id_user, $flag){
+    global $connection;
 
+    $sql = "SELECT * FROM view_user WHERE id=$id_user";
+    $response = $connection->query($sql);
 
+    if ($response->num_rows > 0) {
+        $row = $response->fetch_assoc();
+
+            ?>
+<div class="profileUserStyle">
+    <p>
+        <img width="100%" style="border-radius: 1em;"
+        src="/uploads/<?php echo $row["userName"]; ?>/<?php echo "prew_". $row["picture"]; ?>" alt="logoPic" >
+    </p>
+    <p>Username: <?php echo $row["userName"]; ?></p>
+    <p>First name: <?php echo $row["first_name"]; ?></p>
+    <p>Last name: <?php echo $row["last_name"]; ?></p>
+    <p>Birthdate: <?php echo $row["birthday"]; ?></p>
+    <p>Register date/time: <?php echo $row["registerDate"]; ?></p>
+    <p>Country: <?php echo $row["country"]; ?></p>
+    <p>City: <?php echo $row["city"]; ?></p>
+    <p>Sex: <?php
+
+    $sex = $row["sex"];
+            ;
+            if ($sex == 1) {
+                echo "male";
+            } elseif ($sex == 2) {
+                echo "female";
+            } else {
+                echo "other";
+            } ?></p>
+    
+    <p>About me: <?php echo $row["about"]; ?></p>
+    
+ <?php 
+    if($flag == "user"){
+        echo "<a class=\"editBtnProfile\" href=\"profile.php?editUser=".$row["id"]."\">Edit Profile</a>";
+    }
+ 
+ ?>
+    
+</div>
+
+<?php
+    }else{
+        echo "No user to show! Please login!";
+    }
+}
+
+function editProfile($userId){
+
+    $user = getUser($userId);
+
+    ?>
+    </br>
+    <a class="editBtnProfile" href="profile.php">Go Back</a></br>
+    <form action="" method="POST" enctype="multipart/form-data" >
+    <div class="centralForm">
+        
+        <div class="aroundField">
+            <label class="registerLabel" for="username">Username:</label><br>
+            <input class="inputField" type="text" id="username" name="username" value="<?php echo $user->getUserName(); ?>" ><br>
+        </div>
+        
+        <div class="aroundField">
+       
+        <label class="registerLabel" for="fname">First name:</label><br>
+        <input class="inputField" type="text" id="fname" name="fname" value="<?php echo $user->getFirstName(); ?>" placeholder="e.g. Connor"><br>
+    
+        <label class="registerLabel" for="lname">Last name:</label><br>
+        <input class="inputField" type="text" id="lname" name="lname" value="<?php echo $user->getLastName(); ?>" placeholder="e.g. John"><br>
+
+        <label class="registerLabel" for="sex">Sex:</label><br>
+            <input type="radio" id="male" name="sex" value="1" <?php if($user->getSex() == 1){echo "checked";} ?>>
+            <label for="male">male</label>
+            <input type="radio" id="female" name="sex" value="2" <?php if($user->getSex() == 2){echo "female";} ?>>
+            <label for="female">female</label></br>
+
+        <label class="registerLabel" for="birthday">Birthday:</label><br>
+        <input type="date" id="birthday" name="birthday" value="<?php echo $user->getBirthday(); ?>"><br></br>
+        </div>
+
+        <div class="aroundField">
+            <label class="registerLabel" for="country">Country:</label><br>
+            <input type="text" id="country" name="country" value="<?php echo $user->getCountry(); ?>" placeholder="Type country"><br>
+
+            <label class="registerLabel" for="city">City:</label><br>
+            <input type="text" id="city" name="city" value="<?php echo $user->getCity(); ?>" placeholder="Type city"><br>
+
+            <label class="registerLabel" for="username">About:</label><br>
+            <textarea class="about" name="about" placeholder="Add extra info, e.g. hobbies"><?php echo $user->getAbout(); ?></textarea>
+        </div>
+        </br>
+        <button id="reset" type="reset">Reset</button></br></br>
+        <input id="submit" type="submit" name="submit" value="Save">
+    </div>
+</form>
+
+    <?php
+}
 
 ?>

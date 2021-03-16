@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT']."/connection/config.php";
-require_once "model/User.class.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/includes/classes/User.class.php";
 session_start();
 
 if(isset($_GET["userId"])){

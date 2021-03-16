@@ -22,9 +22,8 @@ if(isset($_GET["profile_set_img"])){
     header('Location: photos.php');
 }
 
-
 ?>
-<h2>Photo Album</h2>
+</br>
 <div class="userAccountDataUpload">
     <form action="/includes/upload.php?user=<?php echo $userName; ?>&user_id=<?php echo $userId; ?>" method="post" enctype="multipart/form-data">
         <input  type="file" name="fileToUpload" id="fileToUpload" accept=".gif, .png, .jpg, .jpeg">

@@ -17,8 +17,7 @@ if(isset($_GET["filter"])){
 
 
 ?>
-<h1>Home Place</h1>
-
+</br>
 <div>
     <h4>MyPlace users</h4>
     <div class="showUsersOnHome">
@@ -30,7 +29,7 @@ if(isset($_GET["filter"])){
                 if ($user->getUser_id() != $_SESSION["user"]->getUser_id()) {
                     ?>
                     <div class="showUser" style="background-image: <?php echo userProfilePic($user->getUser_id(), $user->getUserName()); ?>;">
-                    <div><?php echo $user->getUserName(); ?></div></br>
+                    <div class="usernameStyleDisplay"><a href="profile.php?userId=<?php echo $user->getUser_id(); ?>"><?php echo ucfirst($user->getUserName()); ?></a></div></br>
                     
                     <?php
                     $friendsId = getAllFriendships($_SESSION["user"]->getUser_id());
@@ -41,12 +40,12 @@ if(isset($_GET["filter"])){
                                 $requestSent = checkIfRequestWasSent($_SESSION["user"]->getUser_id(), $user->getUser_id());
                              
                                 if($requestSent == TRUE){
-                                    echo "Friend req sent";
+                                    echo "<span class=\"friendReqSentReceived\">Friend req sent</span>";
                                 }else{
                                     $requestReceive = checkIfRequestWasReceived($_SESSION["user"]->getUser_id(), $user->getUser_id());
                                    
                                     if ($requestReceive == true) {
-                                        echo "Friend req received";
+                                        echo "<span class=\"friendReqSentReceived\">Friend req received</span>";
                                     } else {
                                         ?>
                                 
@@ -62,13 +61,13 @@ if(isset($_GET["filter"])){
                              $requestSent = checkIfRequestWasSent($_SESSION["user"]->getUser_id(), $user->getUser_id());
                              
                              if($requestSent == TRUE){
-                                 echo "Friend req sent";
+                                echo "<span class=\"friendReqSentReceived\">Friend req sent</span>";
                              }else{
 
                               $requestReceive = checkIfRequestWasReceived($_SESSION["user"]->getUser_id(), $user->getUser_id());
                                 
                               if($requestReceive == TRUE){
-                                  echo "Friend req received";
+                                echo "<span class=\"friendReqSentReceived\">Friend req received</span>";
                               }else{
                                   ?>
                                 

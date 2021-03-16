@@ -1,0 +1,31 @@
+.profileUserStyle{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: black;
+    background-color: bisque;
+    padding: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+ .editBtnProfile:link, .editBtnProfile:visited, .editBtnProfile:active{
+    color: black;
+    font-size: 1em;
+    width: 150px;
+    height: 40px;
+    background-color: coral;
+    text-decoration: none;
+    text-align: center;
+    justify-content: space-around;
+    align-self: center;
+    border-radius: 0.5em;
+    box-shadow: 2px 2px 4px 1px black;
+    padding: 0.2em 1.5em;
+    text-transform: uppercase
+}
+
+.editBtnProfile:hover{
+    color: white;
+    background-color: blue;
+} 
